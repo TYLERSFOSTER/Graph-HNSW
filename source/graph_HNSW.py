@@ -1,13 +1,15 @@
 import dgl
 import torch
 
+import tier
 import quotient_tower
 
-def main():
-  tower = quotient_tower.Tower()
+def make_tier():
+  output = tier.Tier()
 
-  return tower
+  return output
   
 
 if __name__ == '__main__':
-  main()
+  tier_0 = make_tier()
+  print(tier_0)

@@ -4,7 +4,7 @@ import torch
 class Tower():
   def __init__(self,
                sample_ratio=0.0,
-               seed_graph=dgl.heterograph({('node', 'to', 'node'): (src, dst)}),
+               seed_graph=dgl.heterograph({('node', 'to', 'node'): (list(), list())}),
                bottom_level=0,
                ):
             
