@@ -2,7 +2,13 @@ import dgl
 import torch
 import copy
 
+'''Local project modules'''
+import simplicial_set
 
+
+'''
+Classes
+'''
 class Tier():
   def __init__(self,
                seed_graph=dgl.heterograph({('node', 'to', 'node'): (list(), list())}),
@@ -16,4 +22,7 @@ class Tier():
     
     self.seed_graph = seed_graph
     self.level_index = level_index
-    self.known_simplices = {-1: {}}
+
+    self.vertices = self.seed_graph.nodes()
+    self.known_simplices = simplicial_set.NonDegenSSet().add_vertices(self.vertices)
+    self.edges = self.seed_graph.edges()

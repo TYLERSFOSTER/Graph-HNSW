@@ -3,21 +3,23 @@ import dgl
 import torch
 import copy
 
+'''Local project modules'''
+import helpers
+import simplicial_set
 import tier
 import quotient_tower
-import simplicial_set
 
 
 '''
 Basic wrapper for testing calls
 '''
-def test_call(test_description, function, test_counter, *args):
+def test_call(test_description, function, test_counter, *args, **kwargs):
   assert isinstance(test_counter, int), \
     '`test_counter` must be an integer.'
   
   print('Test {} \u2014 '.format(test_counter) + test_description )
   try:
-    function(*args)
+    function(*args, **kwargs)
     print('Test {} completed succesfully'.format(test_counter))
   except Exception as inst:
     print('Test {}: Failed'.format(test_counter))
@@ -50,13 +52,14 @@ def build_simplex_test(vertices, vertex_subset, check_dict):
 Dictionary of calls for testing
 '''
 call_dict = {
-  'Test of free instantiation of `tier.Tier`' : (tier.Tier, []),
-  'Test of free instantiation of `tier.Tier`' : (quotient_tower.Tower, []),
+  'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (helpers.all_sublists, [['x','y','z']]),
   'Test of free instantiation of `simplicial_set.NonDegenSSet`' : (simplicial_set.NonDegenSSet, []),
   'Test of `simplicial_set.NonDegenSSet().add_vertices([\'a\',\'00\',\'three\'])`': (add_vertices_test, [['a','00','three']]),
-  'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (simplicial_set.all_sublists, [['x','y','z']]),
   'Test of `simplicial_set.NonDegenSSet().add_vertices([\'x\',\'y\',\'z\']).nondegen_simplex([\'x\',\'y\'])`' : (build_simplex_test, [['x','y','z'], ['x', 'y'], {1 : [['x', 'y']]}]),
   'Test of `simplicial_set.NonDegenSSet().add_vertices([\'w\',\'x\',\'y\',\'z\']).nondegen_simplex([\'w\',\'x\',\'y\'])`' : (build_simplex_test, [['w', 'x','y','z'], ['w', 'x', 'y'], {1: [['w', 'x'], ['w', 'y'], ['x', 'y']]}]),
+  'Test of free instantiation of `tier.Tier`' : (tier.Tier, []),
+  'Test of free instantiation of `tier.Tier`' : (tier.Tier, [[],{'seed_graph': dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})}]),
+  'Test of free instantiation of `quotient_tower.Tower`' : (quotient_tower.Tower, []),
 }
 
 

@@ -2,6 +2,13 @@ import dgl
 import torch
 import copy
 
+'''Local project modules'''
+import tier
+
+
+'''
+Classes
+'''
 class Tower():
   def __init__(self,
                sample_ratio=0.0,

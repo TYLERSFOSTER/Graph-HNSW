@@ -2,27 +2,17 @@ import dgl
 import torch
 import copy
 
-
-'''
-Helper functions
-'''
-def all_sublists(input_list):
-  '''Generates all (ordered) sublists of a given list'''
-  output = [[]]
-  for element in input_list:
-    existing_sublists = list(copy.deepcopy(output))
-    for sublist in existing_sublists:
-      sublist.append(element)
-      output.append(sublist)
-  return output
-
+'''Local project modules'''
+import helpers
 
 
 '''
 Classes
 '''
 class NonDegenSSet():
-  '''Class representing a finite simplicial set in which all simplices are non-degenerate [...this is not the correct way to say this...]'''
+  '''
+  Class representing a simplicial set-like object in which every simplex is determined by an ordered list of vertices.
+  '''
   def __init__(self,
                dimension=0,
                ):
@@ -59,7 +49,7 @@ class NonDegenSSet():
     for vertex in vertices:
       assert vertex in extracted_vertices, 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     
-    subsimplices = all_sublists(vertices)
+    subsimplices = helpers.all_sublists(vertices)
     subsimplices.remove([])
     for subsimplex in subsimplices:
       local_dim_n = len(subsimplex) - 1
