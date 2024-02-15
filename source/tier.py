@@ -1,5 +1,6 @@
 import dgl
 import torch
+import copy
 
 
 class Tier():
@@ -14,4 +15,5 @@ class Tier():
         'Keyword argument `bottom_level` of graph_towers\'s init method must be an integer.'
     
     self.seed_graph = seed_graph
+    self.level_index = level_index
     self.known_simplices = {-1: {}}

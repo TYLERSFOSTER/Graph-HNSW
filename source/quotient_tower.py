@@ -1,5 +1,6 @@
 import dgl
 import torch
+import copy
 
 class Tower():
   def __init__(self,
