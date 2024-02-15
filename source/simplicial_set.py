@@ -75,4 +75,4 @@ class NonDegenSSet():
     for subsimplex in subsimplices:
       local_dim = len(subsimplex) - 1
       print('THIS:', self.simplices[local_dim])
-      self.simplices[local_dim] = list(set(self.simplices[local_dim] + [subsimplex]))
+      new_simplex_list = list(set(self.simplices[local_dim] + [subsimplex]))
