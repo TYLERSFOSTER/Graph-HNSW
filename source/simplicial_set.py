@@ -6,9 +6,11 @@ import copy
 import helpers
 
 
+
 '''
 Classes
 '''
+
 class NonDegenSSet():
   '''
   Class representing a simplicial set-like object in which every simplex is determined by an ordered list of vertices.
@@ -67,3 +69,24 @@ class NonDegenSSet():
         self.simplices.update({local_dim_n : []})
       if subsimplex not in self.simplices[local_dim_n]:
         (self.simplices[local_dim_n]).append(subsimplex)
+
+
+
+'''
+Functions using above class(es)
+'''
+
+def from_graph(seed_graph):
+  assert isinstance(seed_graph, dgl.DGLGraph)
+
+  output = NonDegenSSet()
+
+  vertices = seed_graph.nodes().tolist()
+  output.add_vertices(vertices)
+
+  edges = seed_graph.edges()[0].tolist(), seed_graph.edges()[1].tolist()
+  edge_list = []
+  for k in range(len(edges[0])):
+    output.nondegen_simplex([edges[0][k], edges[1][k]])
+
+  return output
