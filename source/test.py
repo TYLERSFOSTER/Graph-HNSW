@@ -36,12 +36,14 @@ Define complex calls for testing
 def add_vertices_test(vertex_labels):
   test_sSet = simplicial_set.NonDegenSSet()
   test_sSet.add_vertices(vertex_labels)
-  assert test_sSet.simplices[0] == vertex_labels
+  assert test_sSet.extract_vertices() == vertex_labels
 
-def build_simplex_test(vertices, vertex_subset):
+def build_simplex_test(vertices, vertex_subset, check_dict):
   test_sSet = simplicial_set.NonDegenSSet()
   test_sSet.add_vertices(vertices)
   test_sSet.nondegen_simplex(vertex_subset)
+  for key in check_dict:
+    test_sSet.simplices[key] == check_dict[key]
 
   
 '''
@@ -53,7 +55,8 @@ call_dict = {
   'Test of free instantiation of `simplicial_set.NonDegenSSet`' : (simplicial_set.NonDegenSSet, []),
   'Test of `simplicial_set.NonDegenSSet().add_vertices([\'a\',\'00\',\'three\'])`': (add_vertices_test, [['a','00','three']]),
   'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (simplicial_set.all_sublists, [['x','y','z']]),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'x\',\'y\',\'z\']).nondegen_simplex([\'x\',\'y\'])`' : (build_simplex_test, [['x','y','z'], ['x', 'y']]),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'x\',\'y\',\'z\']).nondegen_simplex([\'x\',\'y\'])`' : (build_simplex_test, [['x','y','z'], ['x', 'y'], {1 : [['x', 'y']]}]),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'w\',\'x\',\'y\',\'z\']).nondegen_simplex([\'w\',\'x\',\'y\'])`' : (build_simplex_test, [['w', 'x','y','z'], ['w', 'x', 'y'], {1: [['w', 'x'], ['w', 'y'], ['x', 'y']]}]),
 }
 
 

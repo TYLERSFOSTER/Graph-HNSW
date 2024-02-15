@@ -21,19 +21,6 @@ def all_sublists(input_list):
 '''
 Classes
 '''
-class SSet():
-  def __init__(self,
-               dimension=0,
-               ):
-    
-    assert isinstance(dimension, dgl.DGLHeteroGraph), 'Keyword argument `dim` of sSet\'s init method must be a nonnegative integer.'
-    
-    self.simplices = {0 : {}}
-
-  # A lot to figure out here. Leaving for later.
-
-
-
 class NonDegenSSet():
   '''Class representing a finite simplicial set in which all simplices are non-degenerate [...this is not the correct way to say this...]'''
   def __init__(self,
@@ -48,7 +35,6 @@ class NonDegenSSet():
                       }
 
 
-
   def add_vertices(self, vertex_labels):
     assert isinstance(vertex_labels, list), 'Keyword argument `vertex_labels` must be a list.'
   
@@ -56,20 +42,28 @@ class NonDegenSSet():
       assert isinstance(label, str), 'Each entry in list `vertex_labels` must be a string.'
       assert label not in self.simplices[0], 'Each entry in list must be a string that does NOT yet appear in `NonDegenSSet.simplices[0]`.'
 
-    self.simplices[0] += vertex_labels
+    bracketed_labels = [[label] for label in vertex_labels]
+    self.simplices[0] += bracketed_labels
 
+
+  def extract_vertices(self):
+    bracketed_vertices = self.simplices[0]
+    output = [bracketed_vertex[0] for bracketed_vertex in bracketed_vertices]
+    return output
 
 
   def nondegen_simplex(self, vertices):
     assert isinstance(vertices, list), 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     assert len(set(vertices)) == len(vertices), 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
+    extracted_vertices = self.extract_vertices()
     for vertex in vertices:
-      assert vertex in self.simplices[0], 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
+      assert vertex in extracted_vertices, 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     
     subsimplices = all_sublists(vertices)
+    subsimplices.remove([])
     for subsimplex in subsimplices:
       local_dim_n = len(subsimplex) - 1
       if local_dim_n not in self.simplices:
         self.simplices.update({local_dim_n : []})
-      #n_dim_simmplicies = copy.deepcopy(self.simplices[local_dim_n])
-      (self.simplices[local_dim_n]).append(subsimplex)
+      if subsimplex not in self.simplices[local_dim_n]:
+        (self.simplices[local_dim_n]).append(subsimplex)
