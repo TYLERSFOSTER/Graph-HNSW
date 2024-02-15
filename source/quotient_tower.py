@@ -1,3 +1,6 @@
+import dgl
+import torch
+
 class Tower():
   def __init__(self,
                sample_ratio=0.0,
