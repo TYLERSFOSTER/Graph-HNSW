@@ -22,7 +22,7 @@ class NonDegenSSet():
     assert isinstance(dimension, int), 'Keyword argument `dim` must be a nonnegative integer.'
     assert dimension >= 0, 'Keyword argument `dim` must be a nonnegative integer.'
     
-    self.simplices = {-1 : [],
+    self.simplices = {-1 : [], # This is like fantasy "base simplicial set of dimension -1"
                       0 : [],
                       }
 

@@ -53,15 +53,24 @@ def build_simplex_test(vertices, vertex_subset, check_dict):
 Dictionary of calls for testing
 '''
 call_dict = {
-  'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (helpers.all_sublists, [['x','y','z']]),
-  'Test of free instantiation of `simplicial_set.NonDegenSSet`' : (simplicial_set.NonDegenSSet, []),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([1,4,7])`': (add_vertices_test, [[1,4,7]]),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([0,1,2]).nondegen_simplex([0,1])`' : (build_simplex_test, [[0,1,2], [0,1], {1 : [[0,1]]}]),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([0,1,2,3]).nondegen_simplex([0,1,2])`' : (build_simplex_test, [[0,1,2,3], [0,1,2], {1: [[0,1], [0,2], [1, 2]]}]),
-  'Test of `simplicial_set.from_graph`' : (simplicial_set.from_graph, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
-  'Test of free instantiation of `tier.Tier`' : (tier.Tier, [simplicial_set.from_graph(dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])}))]),
-  'Test of `simplicial_set.from_graph`' : (tier.from_graph, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
-  'Test of free instantiation of `quotient_tower.Tower`' : (quotient_tower.Tower, []),
+  'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : \
+    (helpers.all_sublists, [['x','y','z']]),
+  'Test of free instantiation of `simplicial_set.NonDegenSSet`' : \
+    (simplicial_set.NonDegenSSet, []),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([1,4,7])`': \
+    (add_vertices_test, [[1,4,7]]),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([0,1,2]).nondegen_simplex([0,1])`' : \
+    (build_simplex_test, [[0,1,2], [0,1], {1 : [[0,1]]}]),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([0,1,2,3]).nondegen_simplex([0,1,2])`' : \
+    (build_simplex_test, [[0,1,2,3], [0,1,2], {1: [[0,1], [0,2], [1, 2]]}]),
+  'Test of `simplicial_set.from_graph`' : \
+    (simplicial_set.from_graph, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
+  'Test of `tier.Tier` on `simplicial_set.from_graph(dgl.heterograph({(\'node\', \'to\', \'node\'): ([1,2], [2,3])}))`' : \
+    (tier.Tier, [simplicial_set.from_graph(dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])}))]),
+  'Test of `simplicial_set.from_graph`' : \
+    (tier.from_graph, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
+  'Test of free instantiation of `quotient_tower.Tower`' : \
+    (quotient_tower.Tower, []),
 }
 
 
