@@ -8,7 +8,9 @@ import quotient_tower
 import simplicial_set
 
 
-
+'''
+Basic wrapper for testing calls
+'''
 def test_call(test_description, function, test_counter, *args):
   assert isinstance(test_counter, int), \
     '`test_counter` must be an integer.'
