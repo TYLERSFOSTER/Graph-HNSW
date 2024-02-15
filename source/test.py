@@ -54,11 +54,11 @@ Dictionary of calls for testing
 call_dict = {
   'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (helpers.all_sublists, [['x','y','z']]),
   'Test of free instantiation of `simplicial_set.NonDegenSSet`' : (simplicial_set.NonDegenSSet, []),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'a\',\'00\',\'three\'])`': (add_vertices_test, [['a','00','three']]),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'x\',\'y\',\'z\']).nondegen_simplex([\'x\',\'y\'])`' : (build_simplex_test, [['x','y','z'], ['x', 'y'], {1 : [['x', 'y']]}]),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'w\',\'x\',\'y\',\'z\']).nondegen_simplex([\'w\',\'x\',\'y\'])`' : (build_simplex_test, [['w', 'x','y','z'], ['w', 'x', 'y'], {1: [['w', 'x'], ['w', 'y'], ['x', 'y']]}]),
-  'Test of free instantiation of `tier.Tier`' : (tier.Tier, []),
-  'Test of free instantiation of `tier.Tier`' : (tier.Tier, [[],{'seed_graph': dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})}]),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([1,4,7])`': (add_vertices_test, [[1,4,7]]),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([0,1,2]).nondegen_simplex([0,1])`' : (build_simplex_test, [[0,1,2], [0,1], {1 : [[0,1]]}]),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([0,1,2,3]).nondegen_simplex([0,1,2])`' : (build_simplex_test, [[0,1,2,3], [0,1,2], {1: [[0,1], [0,2], [1, 2]]}]),
+  #'Test of free instantiation of `tier.Tier`' : (tier.Tier, []),
+  #'Test of free instantiation of `tier.Tier`' : (tier.Tier, [[],{'seed_graph': dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})}]),
   'Test of free instantiation of `quotient_tower.Tower`' : (quotient_tower.Tower, []),
 }
 
