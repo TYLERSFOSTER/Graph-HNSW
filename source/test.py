@@ -8,24 +8,15 @@ import quotient_tower
 import simplicial_set
 
 
-call_dict = {
-  'Test of free instantiation of `tier.Tier`' : (tier.Tier, []),
-  'Test of free instantiation of `tier.Tier`' : (quotient_tower.Tower, []),
-  'Test of free instantiation of `simplicial_set.NonDegenSSet`' : (simplicial_set.NonDegenSSet, []),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'a\',\'00\',\'three\'])`': (add_vertices_test, [['a','00','three']]),
-  'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (simplicial_set.all_sublists, [['x','y','z']]),
-  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'x\',\'y\',\'z\']).nondegen_simplex([\'x\',\'y\'])`' : (build_simplex_test, [['x','y','z'], ['x', 'y']]),
-}
-
 
 def test_call(test_description, function, test_counter, *args):
   assert isinstance(test_counter, int), \
     '`test_counter` must be an integer.'
   
-  print('Test {} \U2014 '.format(test_counter) + test_description)
+  print('Test {} \u2014 '.format(test_counter) + test_description )
   try:
     function(*args)
-    print('Test {}: Completed succesfully'.format(test_counter))
+    print('Test {} completed succesfully'.format(test_counter))
   except Exception as inst:
     print('Test {}: Failed'.format(test_counter))
     print('Details of test failure:')
@@ -38,7 +29,7 @@ def test_call(test_description, function, test_counter, *args):
 
 
 '''
-More complex calls to test
+Define complex calls for testing
 '''
 def add_vertices_test(vertex_labels):
   test_sSet = simplicial_set.NonDegenSSet()
@@ -50,14 +41,27 @@ def build_simplex_test(vertices, vertex_subset):
   test_sSet.add_vertices(vertices)
   test_sSet.nondegen_simplex(vertex_subset)
 
+  
+'''
+Dictionary of calls for testing
+'''
+call_dict = {
+  'Test of free instantiation of `tier.Tier`' : (tier.Tier, []),
+  'Test of free instantiation of `tier.Tier`' : (quotient_tower.Tower, []),
+  'Test of free instantiation of `simplicial_set.NonDegenSSet`' : (simplicial_set.NonDegenSSet, []),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'a\',\'00\',\'three\'])`': (add_vertices_test, [['a','00','three']]),
+  'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (simplicial_set.all_sublists, [['x','y','z']]),
+  'Test of `simplicial_set.NonDegenSSet().add_vertices([\'x\',\'y\',\'z\']).nondegen_simplex([\'x\',\'y\'])`' : (build_simplex_test, [['x','y','z'], ['x', 'y']]),
+}
+
 
 '''
 Testing block
 '''
 if __name__ == '__main__':
   test_counter = 0
-  for key in call_list:
-    function, argument_list = call_list[key]
+  for key in call_dict:
+    function, argument_list = call_dict[key]
     test_description = key
     test_counter = test_call(test_description, function, test_counter, *argument_list)
 
