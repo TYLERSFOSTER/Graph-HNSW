@@ -85,7 +85,6 @@ def from_graph(seed_graph):
   output.add_vertices(vertices)
 
   edges = seed_graph.edges()[0].tolist(), seed_graph.edges()[1].tolist()
-  edge_list = []
   for k in range(len(edges[0])):
     output.nondegen_simplex([edges[0][k], edges[1][k]])
 
