@@ -47,10 +47,10 @@ def build_simplex_test(vertices, vertex_subset, check_dict):
   for key in check_dict:
     test_sSet.simplices[key] == check_dict[key]
 
-def name_simplex_in_tier(edge_pair):
+def name_simplex_in_tier(edge_pair, vertex_subset):
   seed_graph = dgl.heterograph({('node', 'to', 'node'): edge_pair})
   test_tier = tier.from_graph(seed_graph)
-  test_tier.name_simplex([1,2,3])
+  test_tier.name_simplex(vertex_subset)
 
   
 '''
@@ -74,7 +74,7 @@ call_dict = {
   'Test of `tier.from_graph`' : \
     (tier.from_graph, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
   'Test of `simplicial_set.from_graph` on `([1,1,2], [2,3,3])`, and then naming of 3-simplex present within' : \
-    (name_simplex_in_tier, [([1,1,2], [2,3,3])]),
+    (name_simplex_in_tier, [([1,1,2], [2,3,3]), [1,2,3]]),
   'Test of free instantiation of `quotient_tower.Tower`' : \
     (quotient_tower.Tower, []),
 }

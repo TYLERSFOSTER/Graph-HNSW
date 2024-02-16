@@ -6,6 +6,7 @@ import copy
 import simplicial_set
 
 
+
 '''
 Classes
 '''
@@ -21,19 +22,21 @@ class Tier():
     self.edges = [[self.sparse_edges[0][k], self.sparse_edges[1][k]] for k in range(len(self.sparse_edges[0]))]
     self.graph = dgl.heterograph({('node', 'to', 'node'): (self.edges)})
 
+
+  def simplex_present(self, vertex_list):
+    dim_plus_one = len(vertex_list)
+    output = True
+    for i in range(0, dim_plus_one-1):
+      for j in range(i+1, dim_plus_one):
+        candidate_edge = [vertex_list[i], vertex_list[j]]
+        output *= (candidate_edge in self.edges)
+    return output
   
-  def name_simplex(self, vertex_list, check_present=True):
-    simplex_dimension = len(vertex_list) - 1
 
-    print('`self.edges`:', self.edges)
-    if check_present:
-      for i in range(0, len(vertex_list)-1):
-        for j in range(i,len(vertex_list)):
-          assert [vertex_list[i], vertex_list[j]] in self.edges, \
-            'Proposed simplex contains boundary 1-simplices not in underlying graph.'
-          
-    self.sSet.nondegen_simplex(vertex_list)
-
+  def name_simplex(self, vertex_list):
+    is_present = self.simplex_present(vertex_list)
+    if is_present:
+      self.sSet.nondegen_simplex(vertex_list)
 
 
 
