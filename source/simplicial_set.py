@@ -77,13 +77,11 @@ Functions using above class(es)
 '''
 
 def from_graph(seed_graph):
-  assert isinstance(seed_graph, dgl.DGLGraph)
+  # assert isinstance(seed_graph, dgl.DGLGraph)
 
   output = NonDegenSSet()
-
   vertices = seed_graph.nodes().tolist()
   output.add_vertices(vertices)
-
   edges = seed_graph.edges()[0].tolist(), seed_graph.edges()[1].tolist()
   for k in range(len(edges[0])):
     output.nondegen_simplex([edges[0][k], edges[1][k]])

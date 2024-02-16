@@ -11,16 +11,19 @@ import simplicial_set
 Classes
 '''
 
+
 class Tier():
+  '''Class representing a single "tier" or "level" in a graph HNSW tower.'''
   def __init__(self,
-               seed_sSet,
+               seed_graph,
                ):
     
-    self.sSet = seed_sSet
+    self.sSet = simplicial_set.from_graph(seed_graph)
     self.vertices = self.sSet.extract_vertices()
     self.sparse_edges = self.sSet.extract_edges()
     self.edges = [[self.sparse_edges[0][k], self.sparse_edges[1][k]] for k in range(len(self.sparse_edges[0]))]
-    self.graph = dgl.heterograph({('node', 'to', 'node'): (self.edges)})
+    self.graph = seed_graph
+    self.live_vertices = seed_graph.nodes().tolist()
 
 
   def simplex_present(self, vertex_list):
@@ -38,15 +41,61 @@ class Tier():
     if is_present:
       self.sSet.nondegen_simplex(vertex_list)
 
+      
+
+class Tier_Map():
+  '''Class representing a partially-defined map between tiers in a graph HNSW tower.'''
+  def __init__(self,
+               tier_upstairs,
+               tier_downstairs,
+               ):
+    assert isinstance(tier_upstairs, Tier)
+    assert isinstance(tier_downstairs, Tier)
+
+    self.upstairs = tier_upstairs
+    self.upstairs_vertices = self.upstairs.vertices
+    self.downstairs = tier_downstairs
+
+    self.partial_map = {}
+
 
 
 '''
-Functions using above class(es)
+Further methods for above class(es)
 '''
 
-def from_graph(seed_graph):
-  seed_sSet = simplicial_set.from_graph(seed_graph)
-  output = Tier(seed_sSet)
-  
-  return output
+def contract_edge(self, contracting_edge):
+  '''Method for `Tier` contracting a single edge and producting a new tier alpong with a contracting map.'''
+  assert contracting_edge in self.edges, \
+    'Edge to contract must be in `Tier.edges`'
+
+  old_edge_list = self.edges
+  new_vertex_list = []
+  new_ST_pair = ([],[])
+  for edge in old_edge_list:
+    new_edge = copy.deepcopy(edge)
+    for i in range(2):
+      if edge[i] == contracting_edge[0]:
+        new_edge[i] = contracting_edge[1]
+    new_vertex_list += new_edge
+    if new_edge[0] != new_edge[1]:
+      new_ST_pair[0].append(edge[0])
+      new_ST_pair[1].append(edge[1])
+  new_vertex_list = list(set(new_vertex_list))
+  new_seed_graph = dgl.heterograph({('node', 'to', 'node'): new_ST_pair})
+  output_tier = Tier(new_seed_graph)
+  output_tier.live_vertices = new_vertex_list
+
+  output_map = Tier_Map(self, output_tier)
+  output_map.partial_map.update({contracting_edge[0] : contracting_edge[1]})
+  for node in output_tier.live_vertices:
+    output_map.partial_map.update({node : node})
+  print('Partial map:', output_map.partial_map)
+
+  return output_tier, output_map
+
+# Give method to class `Tier`
+Tier.contract_edge = contract_edge
+
+
   
