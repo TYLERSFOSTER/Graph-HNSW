@@ -17,4 +17,4 @@ The reason *binary search*-type algorithms are able to speed up search-type task
 }
 [...]
 ### Vertex re-indexing issue for graph quotients.
-<img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/inactive_vertices.jpg" alt="drawing" width="350"/>
+<img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/inactive_vertices.jpg" alt="drawing" width="350" class="center"/>
