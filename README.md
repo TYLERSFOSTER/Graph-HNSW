@@ -9,7 +9,7 @@ The reason *binary search*-type algorithms are able to speed up search-type task
 <p align="center">
 <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/quotient_binary_search_01.jpg" alt="drawing" width="375"/>
 <em align="center">image_caption</em>
-</p> |
+</p>
 <p align="center">
 <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/quotient_binary_search_02.jpg" alt="drawing" width="280"/>
 </p>
