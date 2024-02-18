@@ -35,6 +35,11 @@ def test_call(test_description, function, test_counter, *args, **kwargs):
 '''
 Define complex calls for testing
 '''
+def reverse_dictionary_test():
+  test_dictionary = {1:2, 2:3, 3:2}
+  test_output = reverse_dictionary(test_dictionary)
+  assert test_output == {2:[1,3], 3:2}
+
 def downshift_test(m, n):
   assert m > n, 'Arguments m and n must be integers satisfying m > n.'
   assert helpers.downshift_above(m,n) == m-1
@@ -78,6 +83,8 @@ def successive_quotients(edge_pair, edge_1, edge_2):
 Dictionary of calls for testing
 '''
 call_dict = {
+  'Test of `reverse_dictionary` on \{1:2, 2:3, 3:2\}' : \
+    (downshift_test, [6, 5]),
   'Test of `downshift_above(m, n)` for m > n' : \
     (downshift_test, [6, 5]),
   'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : \

@@ -28,3 +28,15 @@ def downshift_above(index, n):
     output = index
 
   return output
+
+
+def reverse_dict(input_dictionary):
+  output_dictionary = {}
+  for key in input_dictionary:
+    value = input_dictionary[key]
+    if value in output_dictionary:
+      output_dictionary[value].append(key)
+    else:
+      output_dictionary.update({value: [key]})
+      
+  return output_dictionary
