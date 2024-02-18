@@ -98,6 +98,7 @@ call_dict = {
   'Test of `reverse_dictionary` on {1:2, 2:3, 3:2}' : (reverse_dictionary_test, []),
   'Test of `downshift_above(m, n)` for m > n' : (downshift_test, [6, 5]),
   'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (helpers.all_sublists, [['x','y','z']]),
+  'Test of `helpers.max_index` on {1:2, 2:3, 3:2}' : (helpers.max_key, [{1:2, 2:3, 3:2}]),
   'Test of free instantiation of `simplicial_set.NonDegenSSet`' : (simplicial_set.NonDegenSSet, []),
   'Test of `simplicial_set.NonDegenSSet().add_vertices([1,4,7])`': (add_vertices_test, [[1,4,7]]),
   'Test of `simplicial_set.NonDegenSSet().add_vertices([0,1,2]).nondegen_simplex([0,1])`' : (build_simplex_test, [[0,1,2], [0,1], {1 : [[0,1]]}]),
@@ -109,9 +110,9 @@ call_dict = {
   'Test of `contract_random_edge`' : (contract_random_edge_test, [([1,1,2], [2,3,3]), [1,3]]),
   'Test of succesive applications of `contract_edge` applied to edge `[1,3]` in 1-dimensional boundary ' + u'\u2202' +'\u0394[2] (on vertices indexed 1,2,3)' : (successive_quotients, [([1,1,2], [2,3,3]), [1,3], [1,2]]),
   'Test of `compose_maps` on ...' : (compose_maps_test, [([0,1,2, 3], [1,2,3,0]), [0,1], [0,1]]),
+  'Test of `random_contractions_test` on ...' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 2]),
   'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
   'Test of `tower.Tower` on ...' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
-  'Test of `random_contractions_test` on ...' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 2]),
 }
 
 

@@ -4,7 +4,9 @@ import copy
 import numbers
 
 '''Local project modules'''
+import helpers
 import tier
+import math
 
 
 '''
@@ -23,3 +25,26 @@ class Tower():
 
     self.seed_graph = seed_graph
     self.tiers = {starting_index: tier.Tier(seed_graph)}
+    self.maps = {}
+    self.sample_ratio = sample_ratio
+    sample_count = math.ceil(1/self.sample_ratio)
+    self.starting_index = starting_index
+
+    running_index = copy.deepcopy(starting_index)
+    bottom_tier = self.tiers[running_index]
+    bottom_edge_count = len(bottom_tier.graph.edges()[0])
+    bottom_vertices = bottom_tier.graph.nodes().tolist()
+    print('Underlying graph:', bottom_vertices)
+    while bottom_edge_count != 0:
+      double_index = (running_index, running_index+1)
+      running_index += 1
+
+      bottom_tier, bottom_map = bottom_tier.random_contractions(sample_count)
+      self.tiers.update({running_index : bottom_tier})
+      self.maps.update({double_index : bottom_map})
+
+      bottom_vertices = bottom_tier.graph.nodes().tolist()
+      bottom_edge_count = len(bottom_tier.graph.edges()[0])
+      print('Underlying graph:', bottom_vertices)
+
+

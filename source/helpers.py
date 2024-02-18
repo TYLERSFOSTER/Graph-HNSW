@@ -39,6 +39,10 @@ def reverse_dictionary(input_dictionary):
     else:
       output_dictionary.update({value: [key]})
 
-  print('Output dictionary:', output_dictionary)
-
   return output_dictionary
+
+
+def max_key(input_dictionary):
+  output = max(input_dictionary.keys())
+
+  return output
