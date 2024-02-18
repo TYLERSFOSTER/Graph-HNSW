@@ -15,3 +15,16 @@ def all_sublists(input_list):
       sublist.append(element)
       output.append(sublist)
   return output
+
+
+def downshift_above(index, n):
+  '''For re-indexing vertices: shifts index down by 1 if index is larger than some fixed integer.'''
+  assert isinstance(n, int)
+  assert isinstance(index, int)
+
+  if index > n:
+    output = index-1
+  else:
+    output = index
+
+  return output

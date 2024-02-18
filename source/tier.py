@@ -4,13 +4,12 @@ import copy
 
 '''Local project modules'''
 import simplicial_set
-
+import helpers
 
 
 '''
 Classes
 '''
-
 
 class Tier():
   '''Class representing a single "tier" or "level" in a graph HNSW tower.'''
@@ -23,7 +22,7 @@ class Tier():
     self.sparse_edges = self.sSet.extract_edges()
     self.edges = [[self.sparse_edges[0][k], self.sparse_edges[1][k]] for k in range(len(self.sparse_edges[0]))]
     self.graph = seed_graph
-    self.live_vertices = seed_graph.nodes().tolist()
+    #self.live_vertices = seed_graph.nodes().tolist()
 
 
   def simplex_present(self, vertex_list):
@@ -71,26 +70,27 @@ def contract_edge(self, contracting_edge):
 
   old_edge_list = self.edges
   new_vertex_list = []
+  new_STpair_list = []
   new_ST_pair = ([],[])
   for edge in old_edge_list:
     new_edge = copy.deepcopy(edge)
-    for i in range(2):
+    for i in [0,1]:
       if edge[i] == contracting_edge[0]:
         new_edge[i] = contracting_edge[1]
     new_vertex_list += new_edge
-    if new_edge[0] != new_edge[1]:
-      new_ST_pair[0].append(edge[0])
-      new_ST_pair[1].append(edge[1])
+    if (new_edge[0] != new_edge[1]) and ([new_edge[0], new_edge[1]] not in new_STpair_list):
+      new_STpair_list.append([new_edge[0], new_edge[1]])
+      new_ST_pair[0].append(new_edge[0])
+      new_ST_pair[1].append(new_edge[1])
+  shifted_sources = [helpers.downshift_above(index, contracting_edge[0]) for index in new_ST_pair[0]]
+  shifted_targets = [helpers.downshift_above(index, contracting_edge[0]) for index in new_ST_pair[1]]
   new_vertex_list = list(set(new_vertex_list))
-  new_seed_graph = dgl.heterograph({('node', 'to', 'node'): new_ST_pair})
+  new_seed_graph = dgl.heterograph({('node', 'to', 'node'): (shifted_sources, shifted_targets)})
   output_tier = Tier(new_seed_graph)
-  output_tier.live_vertices = new_vertex_list
 
   output_map = Tier_Map(self, output_tier)
-  output_map.partial_map.update({contracting_edge[0] : contracting_edge[1]})
-  for node in output_tier.live_vertices:
-    output_map.partial_map.update({node : node})
-  print('Partial map:', output_map.partial_map)
+  for index in self.vertices:
+    output_map.partial_map.update({index : helpers.downshift_above(index, contracting_edge[0])})
 
   return output_tier, output_map
 
