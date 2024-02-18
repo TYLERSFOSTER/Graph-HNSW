@@ -3,8 +3,9 @@ Refactor of Graph HNSW scripts
 
 Run ```python3 test.py``` at Linux command line, from the directory '/source', to execute a sequence of tests that run through all the basic functionality of the application.
 
-## TODO
-### A
+### TODO
+- Get vertex to *not* disappear when quotient ends at single point.
+- A
 
 ## Some key ideas
 ### Basic idea behind the application.
