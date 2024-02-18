@@ -7,7 +7,7 @@ import copy
 import helpers
 import simplicial_set
 import tier
-import quotient_tower
+import tower
 
 
 '''
@@ -67,6 +67,11 @@ def contract_single_edge(edge_pair, edge):
   test_tier = tier.Tier(seed_graph)
   test_tier.contract_edge(edge)
 
+def contract_random_edge_test(edge_pair, edge):
+  seed_graph = dgl.heterograph({('node', 'to', 'node'): edge_pair})
+  test_tier = tier.Tier(seed_graph)
+  test_tier.contract_random_edge()
+
 def successive_quotients(edge_pair, edge_1, edge_2):
   seed_graph = dgl.heterograph({('node', 'to', 'node'): edge_pair})
   tier_0 = tier.Tier(seed_graph)
@@ -79,6 +84,11 @@ def compose_maps_test(edge_pair, edge_1, edge_2):
   tier_1, tier_map_0 = tier_0.contract_edge(edge_1)
   tier_2, tier_map_1 = tier_1.contract_edge(edge_2)
   composite_map = tier.compose_maps(tier_map_0, tier_map_1)
+
+def random_contractions_test(edge_pair, n):
+  seed_graph = dgl.heterograph({('node', 'to', 'node'): edge_pair})
+  tier_0 = tier.Tier(seed_graph)
+  tier_2, tier_map_0 = tier_0.random_contractions(n)
 
   
 '''
@@ -96,9 +106,12 @@ call_dict = {
   'Test of `tier.Tier` on `simplicial_set.from_graph(dgl.heterograph({(\'node\', \'to\', \'node\'): ([1,2], [2,3])}))`' : (tier.Tier, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
   'Test of `simplicial_set.from_graph` on `([1,1,2], [2,3,3])`, and then naming of 3-simplex present within' : (name_simplex_in_tier, [([1,1,2], [2,3,3]), [1,2,3]]),
   'Test of `contract_edge` applied to edge `[1,3]` in 1-dimensional boundary ' + u'\u2202' +'\u0394[2] (on vertices indexed 1, 2, 3)' : (contract_single_edge, [([1,1,2], [2,3,3]), [1,3]]),
-  'Test of free instantiation of `quotient_tower.Tower`' : (quotient_tower.Tower, []),
+  'Test of `contract_random_edge`' : (contract_random_edge_test, [([1,1,2], [2,3,3]), [1,3]]),
   'Test of succesive applications of `contract_edge` applied to edge `[1,3]` in 1-dimensional boundary ' + u'\u2202' +'\u0394[2] (on vertices indexed 1,2,3)' : (successive_quotients, [([1,1,2], [2,3,3]), [1,3], [1,2]]),
   'Test of `compose_maps` on ...' : (compose_maps_test, [([0,1,2, 3], [1,2,3,0]), [0,1], [0,1]]),
+  'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
+  'Test of `tower.Tower` on ...' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
+  'Test of `random_contractions_test` on ...' : (random_contractions_test, [([0,1,2, 3], [1,2,3,0]), 2]),
 }
 
 

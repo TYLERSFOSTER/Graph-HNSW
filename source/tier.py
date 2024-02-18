@@ -1,6 +1,7 @@
 import dgl
 import torch
 import copy
+import random
 
 '''Local project modules'''
 import simplicial_set
@@ -15,7 +16,6 @@ class Tier():
   def __init__(self,
                seed_graph,
                ):
-    
     self.sSet = simplicial_set.from_graph(seed_graph)
     self.vertices = self.sSet.extract_vertices()
     self.sparse_edges = self.sSet.extract_edges()
@@ -59,7 +59,7 @@ class Tier_Map():
 
 
 '''
-Further methods for above class(es)
+Further functions and methods for above class(es)
 '''
 def contract_edge(self, contracting_edge):
   '''Method for `Tier` contracting a single edge and producting a new tier alpong with a contracting map.'''
@@ -92,13 +92,21 @@ def contract_edge(self, contracting_edge):
 
   return output_tier, output_map
 
-# Give method to class `Tier`
+# Give method `contract_edge` to class `Tier`
 Tier.contract_edge = contract_edge
 
 
-'''
-Further functions making use of above classes
-'''
+def contract_random_edge(self):
+  all_edges = self.edges
+  contracting_edge = random.sample(all_edges, 1)[0]
+  output_tier, output_map = self.contract_edge(contracting_edge)
+
+  return output_tier, output_map
+
+# Give method `contract_random_edge` to class `Tier`
+Tier.contract_random_edge = contract_random_edge
+
+
 def compose_maps(*args):
   assert len(args) > 0
   for k, tier_map in enumerate(args):
@@ -114,7 +122,21 @@ def compose_maps(*args):
   output = Tier_Map(args[0].upstairs, args[-1].downstairs)
   output.partial_map = composite_map
 
-  print('Composed map:', output.partial_map)
-
   return output
 
+
+def random_contractions(self, n):
+  assert isinstance(n, int)
+  assert n > 0
+
+  output_maps = []
+  output_tier = copy.deepcopy(self)
+  for _ in range(n):
+    output_tier, output_map = output_tier.contract_random_edge()
+    output_maps.append(output_map)
+  composite_quotient_map = compose_maps(*output_maps)
+
+  return output_tier, composite_quotient_map
+
+# Give method `contract_random_edge` to class `Tier`
+Tier.random_contractions = random_contractions
