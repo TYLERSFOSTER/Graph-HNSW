@@ -76,10 +76,9 @@ def successive_quotients(edge_pair, edge_1, edge_2):
 def compose_maps_test(edge_pair, edge_1, edge_2):
   seed_graph = dgl.heterograph({('node', 'to', 'node'): edge_pair})
   tier_0 = tier.Tier(seed_graph)
-  tier_map_0 = tier_0.contract_edge(edge_1)[1]
-  tier_map_1 = tier_1.contract_edge(edge_2)[1]
-  composite_map = tier.compose_maps()
-
+  tier_1, tier_map_0 = tier_0.contract_edge(edge_1)
+  tier_2, tier_map_1 = tier_0.contract_edge(edge_2)
+  composite_map = tier.compose_maps(tier_map_0, tier_map_1)
 
   
 '''
@@ -99,7 +98,7 @@ call_dict = {
   'Test of `contract_edge` applied to edge `[1,3]` in 1-dimensional boundary ' + u'\u2202' +'\u0394[2] (on vertices indexed 1, 2, 3)' : (contract_single_edge, [([1,1,2], [2,3,3]), [1,3]]),
   'Test of free instantiation of `quotient_tower.Tower`' : (quotient_tower.Tower, []),
   'Test of succesive applications of `contract_edge` applied to edge `[1,3]` in 1-dimensional boundary ' + u'\u2202' +'\u0394[2] (on vertices indexed 1,2,3)' : (successive_quotients, [([1,1,2], [2,3,3]), [1,3], [1,2]]),
-  'Test of `compose_maps` on ...' : (successive_quotients, [([1,1,2], [2,3,3]), [1,3], [1,2]]),
+  'Test of `compose_maps` on ...' : (compose_maps_test, [([1,1,2], [2,3,3]), [1,3], [1,2]]),
 }
 
 

@@ -10,7 +10,6 @@ import helpers
 '''
 Classes
 '''
-
 class Tier():
   '''Class representing a single "tier" or "level" in a graph HNSW tower.'''
   def __init__(self,
@@ -39,7 +38,6 @@ class Tier():
       self.sSet.nondegen_simplex(vertex_list)
 
       
-
 class Tier_Map():
   '''Class representing a partially-defined map between tiers in a graph HNSW tower.'''
   def __init__(self,
@@ -60,11 +58,9 @@ class Tier_Map():
     return output
 
 
-
 '''
 Further methods for above class(es)
 '''
-
 def contract_edge(self, contracting_edge):
   '''Method for `Tier` contracting a single edge and producting a new tier alpong with a contracting map.'''
   assert contracting_edge in self.edges, \
