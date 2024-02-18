@@ -24,7 +24,6 @@ class Tier():
     self.graph = seed_graph
     #self.live_vertices = seed_graph.nodes().tolist()
 
-
   def simplex_present(self, vertex_list):
     dim_plus_one = len(vertex_list)
     output = True
@@ -33,7 +32,6 @@ class Tier():
         candidate_edge = [vertex_list[i], vertex_list[j]]
         output *= (candidate_edge in self.edges)
     return output
-  
 
   def name_simplex(self, vertex_list):
     is_present = self.simplex_present(vertex_list)
@@ -54,8 +52,12 @@ class Tier_Map():
     self.upstairs = tier_upstairs
     self.upstairs_vertices = self.upstairs.vertices
     self.downstairs = tier_downstairs
-
+    self.downstairs_vertices = self.downstairs.vertices
     self.partial_map = {}
+
+  def partial_preimage(self):
+    output = helpers.reverse_dictionary(self.partial_map)
+    return output
 
 
 
@@ -98,4 +100,13 @@ def contract_edge(self, contracting_edge):
 Tier.contract_edge = contract_edge
 
 
-  
+'''
+Further functions making use of above classes
+'''
+def compose_maps(*args):
+  for argument in args:
+    assert isinstance(argument, Tier_Map)
+  for i in range(len(args)-1):
+    assert args[i].downstairs == args[i+1].upstairs
+
+  pass
