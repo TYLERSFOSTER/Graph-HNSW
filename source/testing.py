@@ -111,7 +111,7 @@ call_dict = {
   'Test of `compose_maps` on ...' : (compose_maps_test, [([0,1,2, 3], [1,2,3,0]), [0,1], [0,1]]),
   'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
   'Test of `tower.Tower` on ...' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
-  'Test of `random_contractions_test` on ...' : (random_contractions_test, [([0,1,2, 3], [1,2,3,0]), 2]),
+  'Test of `random_contractions_test` on ...' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 2]),
 }
 
 
