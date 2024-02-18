@@ -100,9 +100,21 @@ Tier.contract_edge = contract_edge
 Further functions making use of above classes
 '''
 def compose_maps(*args):
-  for argument in args:
-    assert isinstance(argument, Tier_Map)
-  for i in range(len(args)-1):
-    assert args[i].downstairs == args[i+1].upstairs
+  assert len(args) > 0
+  for k, tier_map in enumerate(args):
+    assert isinstance(tier_map, Tier_Map)
+    if k < len(args)-1:
+      assert tier_map.downstairs == args[k+1].upstairs
 
-  pass
+  composite_output = args[0].upstairs.vertices
+  composite_map = {key:key for key in composite_output}
+  for tier_map in args:
+    F = tier_map.partial_map
+    composite_map.update({key: F[composite_map[key]] for key in composite_map})
+  output = Tier_Map(args[0].upstairs, args[-1].downstairs)
+  output.partial_map = composite_map
+
+  print('Composed map:', output.partial_map)
+
+  return output
+
