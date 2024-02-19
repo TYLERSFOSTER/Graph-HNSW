@@ -120,13 +120,13 @@ def compose_maps(*args):
   for tier_map in args:
     F = tier_map.partial_map
     for input_value in keys_forever:
-      print('Composite map keys:', composite_map.keys())
-      print('Input value:', input_value)
-      print('Composite of input:', composite_map[input_value])
+      # print('Composite map keys:', composite_map.keys())
+      # print('Input value:', input_value)
+      # print('Composite of input:', composite_map[input_value])
       composite_map.update({input_value : F[composite_map[input_value]]})
     del(F)
   output = Tier_Map(args[0].upstairs, args[-1].downstairs)
-  print('Composite map:', composite_map)
+  # print('Composite map:', composite_map)
   output.partial_map = composite_map
 
   return output
@@ -140,13 +140,14 @@ def random_contractions(self, n):
   map_counter = n
   output_maps = []
   output_tier = copy.deepcopy(self)
-  print('Edges:', output_tier.edges)
-  print('Vertices:', output_tier.vertices)
-  for _ in range(n):
+  # print('Edges:', output_tier.edges)
+  # print('Vertices:', output_tier.vertices)
+  while len(output_tier.edges) > 0:
     output_tier, output_map = output_tier.contract_random_edge()
     output_maps.append(output_map)
-    print('Edges:', output_tier.edges)
-  print('Vertices:', output_tier.vertices)
+    map_counter -= 1
+    # print('Edges:', output_tier.edges)
+    # print('Vertices:', output_tier.vertices)
   composite_quotient_map = compose_maps(*output_maps)
 
   return output_tier, composite_quotient_map
