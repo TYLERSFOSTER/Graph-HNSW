@@ -21,12 +21,10 @@ def downshift_above(index, n):
   '''For re-indexing vertices: shifts index down by 1 if index is larger than some fixed integer.'''
   assert isinstance(n, int)
   assert isinstance(index, int)
-
   if index > n:
     output = index-1
   else:
     output = index
-
   return output
 
 
@@ -38,11 +36,9 @@ def reverse_dictionary(input_dictionary):
       output_dictionary[value].append(key)
     else:
       output_dictionary.update({value: [key]})
-
   return output_dictionary
 
 
 def max_key(input_dictionary):
   output = max(input_dictionary.keys())
-
   return output

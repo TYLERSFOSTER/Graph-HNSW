@@ -27,15 +27,18 @@ class Tower():
     self.tiers = {starting_index: tier.Tier(seed_graph)}
     self.maps = {}
     self.sample_ratio = sample_ratio
-    sample_count = math.ceil(1/self.sample_ratio)
+    sample_count = math.floor(len(self.seed_graph.nodes()) * self.sample_ratio)
     self.starting_index = starting_index
 
     running_index = copy.deepcopy(starting_index)
     bottom_tier = self.tiers[running_index]
     bottom_edge_count = len(bottom_tier.graph.edges()[0])
     bottom_vertices = bottom_tier.graph.nodes().tolist()
-    print('Underlying graph:', bottom_vertices)
+    print('Underlying graph:', bottom_tier.graph.edges())
+    tier_counter = 0
     while bottom_edge_count != 0:
+      print('tier_counter value:', tier_counter)
+      tier_counter += 1
       double_index = (running_index, running_index+1)
       running_index += 1
 
