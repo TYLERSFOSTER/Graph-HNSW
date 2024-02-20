@@ -16,7 +16,7 @@ Basic wrapper for testing calls
 def test_call(test_description, function, test_counter, *args, **kwargs):
   assert isinstance(test_counter, int), \
     '`test_counter` must be an integer.'
-  
+  #-----------------------------------------
   print('Test {} \u2014 '.format(test_counter) + test_description)
   try:
     function(*args, **kwargs)
@@ -28,7 +28,6 @@ def test_call(test_description, function, test_counter, *args, **kwargs):
     for exception_argument in inst.args:
         print(exception_argument)
     print('\n', traceback.format_exc())
-  
   return test_counter + 1
 
 
@@ -114,7 +113,7 @@ call_dict = {
   'Test of `random_contractions_test` on graph ([0,1,2,3,4,5], [1,2,3,4,5,0]), with 4 successive contractions' : (random_contractions_test, [([0,1,2,3,4,5], [1,2,3,4,5,0]), 4]),
   'Test of `random_contractions_test` on graph ([0,1,2,3], [1,2,3,0]), with 3 successive contractions' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 3]), # Debugging needs to start with key error here...
   'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
-  'Test of `tower.Tower` on ...' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
+  'Test of `tower.Tower` on length-4 cycle graph ([0,1,2, 3], [1,2,3,0]) at edge contraction rate 0.5' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
 }
 
 

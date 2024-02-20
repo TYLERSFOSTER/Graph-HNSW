@@ -21,7 +21,6 @@ class Tier():
     self.sparse_edges = self.sSet.extract_edges()
     self.edges = [[self.sparse_edges[0][k], self.sparse_edges[1][k]] for k in range(len(self.sparse_edges[0]))]
     self.graph = seed_graph
-    #self.live_vertices = seed_graph.nodes().tolist()
 
   def simplex_present(self, vertex_list):
     dim_plus_one = len(vertex_list)
@@ -46,7 +45,7 @@ class Tier_Map():
                ):
     assert isinstance(tier_upstairs, Tier)
     assert isinstance(tier_downstairs, Tier)
-
+    #-----------------------------------------
     self.upstairs = tier_upstairs
     self.upstairs_vertices = self.upstairs.vertices
     self.downstairs = tier_downstairs
@@ -64,7 +63,7 @@ Further functions and methods for above class(es)
 def contract_edge(self, contracting_edge):
   '''Method for `Tier` contracting a single edge and producting a new tier alpong with a contracting map.'''
   assert contracting_edge in self.edges, 'Edge to contract must be in `Tier.edges`'
-
+  #-----------------------------------------
   old_edge_list = self.edges
   new_vertex_list = []
   new_STpair_list = []
@@ -81,7 +80,6 @@ def contract_edge(self, contracting_edge):
       new_ST_pair[1].append(new_edge[1])
   shifted_sources = [helpers.downshift_above(index, contracting_edge[0]) for index in new_ST_pair[0]]
   shifted_targets = [helpers.downshift_above(index, contracting_edge[0]) for index in new_ST_pair[1]]
-  # print('Contracting map:', (shifted_sources, shifted_targets))
   new_vertex_list = list(set(new_vertex_list))
   new_seed_graph = dgl.heterograph({('node', 'to', 'node'): (shifted_sources, shifted_targets)})
   output_tier = Tier(new_seed_graph)
@@ -91,9 +89,7 @@ def contract_edge(self, contracting_edge):
       output_map.partial_map.update({index : helpers.downshift_above(index, contracting_edge[0])})
     else:
       output_map.partial_map.update({contracting_edge[0] : helpers.downshift_above(contracting_edge[1], contracting_edge[0])})
-
   return output_tier, output_map
-
 # Give method `contract_edge` to class `Tier`
 Tier.contract_edge = contract_edge
 
@@ -102,12 +98,7 @@ def contract_random_edge(self):
   all_edges = self.edges
   contracting_edge = random.sample(all_edges, 1)[0]
   output_tier, output_map = self.contract_edge(contracting_edge)
-  # print('Graph to contract:', self.graph.edges())
-  # print('All edges:', all_edges)
-  # print('Edge to contract:', contracting_edge)
-
   return output_tier, output_map
-
 # Give method `contract_random_edge` to class `Tier`
 Tier.contract_random_edge = contract_random_edge
 
@@ -118,33 +109,22 @@ def compose_maps(*args):
     assert isinstance(tier_map, Tier_Map)
     if k < len(args)-1:
       assert tier_map.downstairs == args[k+1].upstairs
-
+  #-----------------------------------------
   initial_values = args[0].upstairs.vertices
   composite_map = {key : key for key in initial_values}
   composite_input = list(composite_map.keys())
-  # print('Initial inputs:', composite_input)
-  
   tier_counter = 0
   for tier_map in args:
     F = tier_map.partial_map
-    # print('\n-------------------------- Tier {}'.format(tier_counter))
-    # print('Map domain:', tier_map.upstairs.vertices)
-    # print('Current `tier_map.partial_map`, serving as map `F`:', F)
     new_composite_map = {}
     for input_value in composite_input:
       old_composite_value = int(composite_map[input_value])
       output_value = int(F[old_composite_value])
       new_composite_map.update({input_value : output_value})
-      # print('Current composite map:', composite_map)
-      # print('Input value:', input_value)
-      # print('Old composite value:', old_composite_value)
-      # print('Output value:', output_value)
     composite_map = new_composite_map
     tier_counter += 1
   output = Tier_Map(args[0].upstairs, args[-1].downstairs)
-  # print('Composite map:', composite_map)
   output.partial_map = composite_map
-
   return output
 
 
@@ -152,21 +132,15 @@ def random_contractions(self, n):
   assert len(self.edges) >= n, 'Graph must have at least n edges if we plan to contract n edges.'
   assert isinstance(n, int)
   assert n > 0
-
+  #-----------------------------------------
   map_counter = n
   output_maps = []
   output_tier = copy.deepcopy(self)
-  # print('Edges:', output_tier.edges)
-  # print('Vertices:', output_tier.vertices)
   while len(output_tier.edges) > 0 and map_counter > 0:
     output_tier, output_map = output_tier.contract_random_edge()
     output_maps.append(output_map)
     map_counter -= 1
-    # print('Edges:', output_tier.edges)
-    # print('Vertices:', output_tier.vertices)
   composite_quotient_map = compose_maps(*output_maps)
-
   return output_tier, composite_quotient_map
-
 # Give method `contract_random_edge` to class `Tier`
 Tier.random_contractions = random_contractions
