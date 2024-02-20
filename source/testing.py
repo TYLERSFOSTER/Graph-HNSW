@@ -85,10 +85,12 @@ def compose_maps_test(edge_pair, edge_1, edge_2):
   composite_map = tier.compose_maps(tier_map_0, tier_map_1)
 
 def random_contractions_test(edge_pair, n):
-  # print('n:', n)
   seed_graph = dgl.heterograph({('node', 'to', 'node'): edge_pair})
   tier_0 = tier.Tier(seed_graph)
   tier_2, tier_map_0 = tier_0.random_contractions(n)
+
+def tower_length_test(edge_pair, ratio_value):
+  current_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
 
   
 '''
@@ -114,6 +116,7 @@ call_dict = {
   'Test of `random_contractions_test` on graph ([0,1,2,3], [1,2,3,0]), with 3 successive contractions' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 3]), # Debugging needs to start with key error here...
   'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
   'Test of `tower.Tower` on length-4 cycle graph ([0,1,2, 3], [1,2,3,0]) at edge contraction rate 0.5' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
+  'Test of `tower.Tower.length` on length-7 cycle graph at edge contraction rate 0.2' : (tower_length_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2]),
 }
 
 

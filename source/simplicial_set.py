@@ -9,16 +9,14 @@ import helpers
 '''
 Classes
 '''
-class NonDegenSSet():
-  '''
-  Class representing a simplicial set-like object in which every simplex is determined by an ordered list of vertices.
-  '''
+class NonDegenSSet(): 
+  '''Class representing a simplicial set-like object in which every simplex is determined by an ordered list of vertices.'''
   def __init__(self,
                dimension=0,
                ):
     assert isinstance(dimension, int), 'Keyword argument `dim` must be a nonnegative integer.'
     assert dimension >= 0, 'Keyword argument `dim` must be a nonnegative integer.'
-    
+    #-----------------------------------------
     self.simplices = {-1 : [], # This is like fantasy "base simplicial set of dimension -1"
                       0 : [],
                       }
@@ -26,7 +24,7 @@ class NonDegenSSet():
 
   def add_vertices(self, vertex_labels):
     assert isinstance(vertex_labels, list), 'Keyword argument `vertex_labels` must be a list.'
-  
+    #-----------------------------------------
     for label in vertex_labels:
       assert isinstance(label, int), 'Each entry in list `vertex_labels` must be an integer.'
       assert label not in self.simplices[0], 'Each entry in list must be a string that does NOT yet appear in `NonDegenSSet.simplices[0]`.'
@@ -57,7 +55,7 @@ class NonDegenSSet():
     extracted_vertices = self.extract_vertices()
     for vertex in vertices:
       assert vertex in extracted_vertices, 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
-    
+    #-----------------------------------------
     subsimplices = helpers.all_sublists(vertices)
     subsimplices.remove([])
     for subsimplex in subsimplices:
@@ -72,12 +70,12 @@ class NonDegenSSet():
 Functions using above class(es)
 '''
 def from_graph(seed_graph):
-  # assert isinstance(seed_graph, dgl.DGLGraph)
+  assert isinstance(seed_graph, dgl.DGLGraph)
+  #-----------------------------------------
   output = NonDegenSSet()
   verts = seed_graph.nodes().tolist()
   output.add_vertices(verts)
   inout = seed_graph.edges()[0].tolist(), seed_graph.edges()[1].tolist()
   for k in range(len(inout[0])):
     output.nondegen_simplex([inout[0][k], inout[1][k]])
-  
   return output
