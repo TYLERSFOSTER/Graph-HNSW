@@ -8,8 +8,8 @@ Run ```python3 testing.py``` at Linux command line, from the directory '/source'
 - Solve issue: When edge contraction sampling ratio is too high, error occurs because graph collapses too fast.
 
 ## Some key ideas
-### Basic idea behind the application.
-The reason *binary search*-type algorithms are able to speed up search-type tasks on lists is because these algorithms include succesive sub-steps where we greatly reduce the search space, which is to say the list we're searching through. There's a bit of a limit/colimit choice going on here.
+### Basic idea behind the application: A platform for generalizations of binary search to finite directed graphs.
+The reason *binary search*-type algorithms are able to speed up search-type tasks on lists is because these algorithms include succesive sub-steps where we greatly reduce the search space. We might call this the "limit" perspective on binary search. There is a dual, "colimit" perspective where we do not descend into smaller and smaller subspaces of our search space, but instead *ascend* through larger and larger contractions of our search space.
 <p align="center">
   <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/quotient_binary_search_01.jpg" alt="drawing" width="375"/>
 </p>
