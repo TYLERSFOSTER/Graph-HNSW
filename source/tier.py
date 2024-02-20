@@ -98,7 +98,10 @@ Tier.contract_edge = contract_edge
 
 def contract_random_edge(self):
   all_edges = self.edges
+  print('Graph to contract:', self.graph.edges())
+  print('All edges:', all_edges)
   contracting_edge = random.sample(all_edges, 1)[0]
+  print('Edge to contract:', contracting_edge)
   output_tier, output_map = self.contract_edge(contracting_edge)
 
   return output_tier, output_map
@@ -114,17 +117,28 @@ def compose_maps(*args):
     if k < len(args)-1:
       assert tier_map.downstairs == args[k+1].upstairs
 
-  composite_output = args[0].upstairs.vertices
-  composite_map = {key : key for key in composite_output}
-  keys_forever = list(composite_map.keys())
+  initial_values = args[0].upstairs.vertices
+  composite_map = {key : key for key in initial_values}
+  composite_input = list(composite_map.keys())
+  print('Initial inputs:', composite_input)
+  
+  tier_counter = 0
   for tier_map in args:
+    print('-------------------------- Tier {}'.format(tier_counter))
     F = tier_map.partial_map
-    for input_value in keys_forever:
-      # print('Composite map keys:', composite_map.keys())
-      # print('Input value:', input_value)
-      # print('Composite of input:', composite_map[input_value])
-      composite_map.update({input_value : F[composite_map[input_value]]})
-    del(F)
+    print('Map domain:', tier_map.upstairs.vertices)
+    print('`tier_map.partial_map`:', F)
+    new_composite_map = {}
+    for input_value in composite_input:
+      print('Current composite map:', composite_map)
+      print('Input value:', input_value)
+      old_composite_value = int(composite_map[input_value])
+      print('Old composite value:', old_composite_value)
+      output_value = int(F[old_composite_value])
+      print('Output value:', output_value)
+      new_composite_map.update({input_value : output_value})
+    composite_map = new_composite_map
+    tier_counter += 1
   output = Tier_Map(args[0].upstairs, args[-1].downstairs)
   # print('Composite map:', composite_map)
   output.partial_map = composite_map
@@ -142,7 +156,7 @@ def random_contractions(self, n):
   output_tier = copy.deepcopy(self)
   # print('Edges:', output_tier.edges)
   # print('Vertices:', output_tier.vertices)
-  while len(output_tier.edges) > 0:
+  while len(output_tier.edges) > 0 and map_counter > 0:
     output_tier, output_map = output_tier.contract_random_edge()
     output_maps.append(output_map)
     map_counter -= 1

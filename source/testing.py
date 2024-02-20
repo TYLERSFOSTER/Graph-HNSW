@@ -17,7 +17,7 @@ def test_call(test_description, function, test_counter, *args, **kwargs):
   assert isinstance(test_counter, int), \
     '`test_counter` must be an integer.'
   
-  print('Test {} \u2014 '.format(test_counter) + test_description)
+  print('\nTest {} \u2014 '.format(test_counter) + test_description)
   try:
     function(*args, **kwargs)
     print('Test {} completed succesfully'.format(test_counter))
@@ -111,8 +111,8 @@ call_dict = {
   'Test of `contract_random_edge`' : (contract_random_edge_test, [([1,1,2], [2,3,3]), [1,3]]),
   'Test of succesive applications of `contract_edge` applied to edge `[1,3]` in 1-dimensional boundary ' + u'\u2202' +'\u0394[2] (on vertices indexed 1,2,3)' : (successive_quotients, [([1,1,2], [2,3,3]), [1,3], [1,2]]),
   'Test of `compose_maps` on graph ([0,1,2,3], [1,2,3,0]), contracting edge [0,1], and then again contracting edge [0,1]' : (compose_maps_test, [([0,1,2, 3], [1,2,3,0]), [0,1], [0,1]]),
-  'Test of `random_contractions_test` on graph ([0,1,2,3], [1,2,3,0]), with 2 successive contractions' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 2]),
-  'Test of `random_contractions_test` on graph ([0,1,2,3], [1,2,3,0]), with 3 successive contractions' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 3]), # Debugging needs to start here...
+  'Test of `random_contractions_test` on graph ([0,1,2,3,4,5], [1,2,3,4,5,0]), with 4 successive contractions' : (random_contractions_test, [([0,1,2,3,4,5], [1,2,3,4,5,0]), 4]),
+  'Test of `random_contractions_test` on graph ([0,1,2,3], [1,2,3,0]), with 3 successive contractions' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 3]), # Debugging needs to start with key error here...
   'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
   'Test of `tower.Tower` on ...' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
 }
