@@ -48,7 +48,7 @@ class NonDegenSSet():
     return src_list, tgt_list
 
 
-  def nondegen_simplex(self, vertices):
+  def nondegen_simplex(self, vertices, include_all_subsimplices=True):
     # print('Simplex to add:', vertices)
     assert isinstance(vertices, list), 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     assert len(set(vertices)) == len(vertices), 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
@@ -56,8 +56,11 @@ class NonDegenSSet():
     for vertex in vertices:
       assert vertex in extracted_vertices, 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     #-----------------------------------------
-    subsimplices = helpers.all_sublists(vertices)
-    subsimplices.remove([])
+    if include_all_subsimplices == True:
+      subsimplices = helpers.all_sublists(vertices)
+      subsimplices.remove([])
+    else:
+      subsimplices = [vertices]
     for subsimplex in subsimplices:
       local_dim_n = len(subsimplex) - 1
       if local_dim_n not in self.simplices:

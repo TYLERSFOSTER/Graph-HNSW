@@ -1,7 +1,5 @@
 import traceback
 import dgl
-import torch
-import copy
 
 '''Local project modules'''
 import helpers
