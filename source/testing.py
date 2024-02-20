@@ -17,7 +17,7 @@ def test_call(test_description, function, test_counter, *args, **kwargs):
   assert isinstance(test_counter, int), \
     '`test_counter` must be an integer.'
   
-  print('\nTest {} \u2014 '.format(test_counter) + test_description)
+  print('Test {} \u2014 '.format(test_counter) + test_description)
   try:
     function(*args, **kwargs)
     print('Test {} completed succesfully'.format(test_counter))
@@ -86,7 +86,7 @@ def compose_maps_test(edge_pair, edge_1, edge_2):
   composite_map = tier.compose_maps(tier_map_0, tier_map_1)
 
 def random_contractions_test(edge_pair, n):
-  print('n:', n)
+  # print('n:', n)
   seed_graph = dgl.heterograph({('node', 'to', 'node'): edge_pair})
   tier_0 = tier.Tier(seed_graph)
   tier_2, tier_map_0 = tier_0.random_contractions(n)

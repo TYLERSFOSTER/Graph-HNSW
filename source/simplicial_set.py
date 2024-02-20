@@ -16,7 +16,6 @@ class NonDegenSSet():
   def __init__(self,
                dimension=0,
                ):
-    
     assert isinstance(dimension, int), 'Keyword argument `dim` must be a nonnegative integer.'
     assert dimension >= 0, 'Keyword argument `dim` must be a nonnegative integer.'
     
@@ -31,7 +30,6 @@ class NonDegenSSet():
     for label in vertex_labels:
       assert isinstance(label, int), 'Each entry in list `vertex_labels` must be an integer.'
       assert label not in self.simplices[0], 'Each entry in list must be a string that does NOT yet appear in `NonDegenSSet.simplices[0]`.'
-
     bracketed_labels = [[label] for label in vertex_labels]
     self.simplices[0] += bracketed_labels
 
@@ -53,6 +51,7 @@ class NonDegenSSet():
 
 
   def nondegen_simplex(self, vertices):
+    # print('Simplex to add:', vertices)
     assert isinstance(vertices, list), 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     assert len(set(vertices)) == len(vertices), 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     extracted_vertices = self.extract_vertices()
@@ -80,5 +79,5 @@ def from_graph(seed_graph):
   inout = seed_graph.edges()[0].tolist(), seed_graph.edges()[1].tolist()
   for k in range(len(inout[0])):
     output.nondegen_simplex([inout[0][k], inout[1][k]])
-
+  
   return output

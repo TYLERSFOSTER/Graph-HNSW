@@ -63,8 +63,7 @@ Further functions and methods for above class(es)
 '''
 def contract_edge(self, contracting_edge):
   '''Method for `Tier` contracting a single edge and producting a new tier alpong with a contracting map.'''
-  assert contracting_edge in self.edges, \
-    'Edge to contract must be in `Tier.edges`'
+  assert contracting_edge in self.edges, 'Edge to contract must be in `Tier.edges`'
 
   old_edge_list = self.edges
   new_vertex_list = []
@@ -82,13 +81,16 @@ def contract_edge(self, contracting_edge):
       new_ST_pair[1].append(new_edge[1])
   shifted_sources = [helpers.downshift_above(index, contracting_edge[0]) for index in new_ST_pair[0]]
   shifted_targets = [helpers.downshift_above(index, contracting_edge[0]) for index in new_ST_pair[1]]
+  # print('Contracting map:', (shifted_sources, shifted_targets))
   new_vertex_list = list(set(new_vertex_list))
   new_seed_graph = dgl.heterograph({('node', 'to', 'node'): (shifted_sources, shifted_targets)})
   output_tier = Tier(new_seed_graph)
-
   output_map = Tier_Map(self, output_tier)
   for index in self.vertices:
-    output_map.partial_map.update({index : helpers.downshift_above(index, contracting_edge[0])})
+    if index != contracting_edge[0]:
+      output_map.partial_map.update({index : helpers.downshift_above(index, contracting_edge[0])})
+    else:
+      output_map.partial_map.update({contracting_edge[0] : helpers.downshift_above(contracting_edge[1], contracting_edge[0])})
 
   return output_tier, output_map
 
@@ -98,11 +100,11 @@ Tier.contract_edge = contract_edge
 
 def contract_random_edge(self):
   all_edges = self.edges
-  print('Graph to contract:', self.graph.edges())
-  print('All edges:', all_edges)
   contracting_edge = random.sample(all_edges, 1)[0]
-  print('Edge to contract:', contracting_edge)
   output_tier, output_map = self.contract_edge(contracting_edge)
+  # print('Graph to contract:', self.graph.edges())
+  # print('All edges:', all_edges)
+  # print('Edge to contract:', contracting_edge)
 
   return output_tier, output_map
 
@@ -120,23 +122,23 @@ def compose_maps(*args):
   initial_values = args[0].upstairs.vertices
   composite_map = {key : key for key in initial_values}
   composite_input = list(composite_map.keys())
-  print('Initial inputs:', composite_input)
+  # print('Initial inputs:', composite_input)
   
   tier_counter = 0
   for tier_map in args:
-    print('-------------------------- Tier {}'.format(tier_counter))
     F = tier_map.partial_map
-    print('Map domain:', tier_map.upstairs.vertices)
-    print('`tier_map.partial_map`:', F)
+    # print('\n-------------------------- Tier {}'.format(tier_counter))
+    # print('Map domain:', tier_map.upstairs.vertices)
+    # print('Current `tier_map.partial_map`, serving as map `F`:', F)
     new_composite_map = {}
     for input_value in composite_input:
-      print('Current composite map:', composite_map)
-      print('Input value:', input_value)
       old_composite_value = int(composite_map[input_value])
-      print('Old composite value:', old_composite_value)
       output_value = int(F[old_composite_value])
-      print('Output value:', output_value)
       new_composite_map.update({input_value : output_value})
+      # print('Current composite map:', composite_map)
+      # print('Input value:', input_value)
+      # print('Old composite value:', old_composite_value)
+      # print('Output value:', output_value)
     composite_map = new_composite_map
     tier_counter += 1
   output = Tier_Map(args[0].upstairs, args[-1].downstairs)
