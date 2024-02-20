@@ -1,5 +1,4 @@
 import dgl
-import torch
 import copy
 import random
 
@@ -90,7 +89,7 @@ def contract_edge(self, contracting_edge):
     else:
       output_map.partial_map.update({contracting_edge[0] : helpers.downshift_above(contracting_edge[1], contracting_edge[0])})
   return output_tier, output_map
-# Give method `contract_edge` to class `Tier`
+'''Give method `contract_edge` to class `Tier`'''
 Tier.contract_edge = contract_edge
 
 
@@ -99,7 +98,7 @@ def contract_random_edge(self):
   contracting_edge = random.sample(all_edges, 1)[0]
   output_tier, output_map = self.contract_edge(contracting_edge)
   return output_tier, output_map
-# Give method `contract_random_edge` to class `Tier`
+'''Give method `contract_random_edge` to class `Tier`'''
 Tier.contract_random_edge = contract_random_edge
 
 
@@ -136,11 +135,12 @@ def random_contractions(self, n):
   map_counter = n
   output_maps = []
   output_tier = copy.deepcopy(self)
+  # This loop needs to be rewritten, because it is too memory intensive. It should do each composition pairwise, redfining variables each time.
   while len(output_tier.edges) > 0 and map_counter > 0:
     output_tier, output_map = output_tier.contract_random_edge()
     output_maps.append(output_map)
     map_counter -= 1
   composite_quotient_map = compose_maps(*output_maps)
   return output_tier, composite_quotient_map
-# Give method `contract_random_edge` to class `Tier`
+'''Give method `contract_random_edge` to class `Tier`'''
 Tier.random_contractions = random_contractions

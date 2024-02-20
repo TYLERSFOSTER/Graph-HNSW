@@ -1,6 +1,4 @@
 import dgl
-import torch
-import copy
 
 '''Local project modules'''
 import helpers
@@ -49,7 +47,6 @@ class NonDegenSSet():
 
 
   def nondegen_simplex(self, vertices, include_all_subsimplices=True):
-    # print('Simplex to add:', vertices)
     assert isinstance(vertices, list), 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     assert len(set(vertices)) == len(vertices), 'Argument `vertices` must be a list of distinct elements of `NonDegenSSet.simplices[0]`.'
     extracted_vertices = self.extract_vertices()
