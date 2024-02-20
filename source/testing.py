@@ -6,6 +6,7 @@ import helpers
 import simplicial_set
 import tier
 import tower
+import simplices_search
 
 
 '''
@@ -115,6 +116,7 @@ call_dict = {
   'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})]),
   'Test of `tower.Tower` on length-4 cycle graph ([0,1,2, 3], [1,2,3,0]) at edge contraction rate 0.5' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
   'Test of `tower.Tower.length` on length-7 cycle graph at edge contraction rate 0.2' : (tower_length_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2]),
+  'Test of `simplices_search.Bot` instantiated from `tower.Tower` on length-7 cycle graph at edge contraction rate 0.2' : (simplices_search.Bot, [tower.Tower(dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])}), sample_ratio=.2)]),
 }
 
 
@@ -127,4 +129,3 @@ if __name__ == '__main__':
     function, argument_list = call_dict[key]
     test_description = key
     test_counter = test_call(test_description, function, test_counter, *argument_list)
-

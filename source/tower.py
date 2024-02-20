@@ -26,6 +26,7 @@ class Tower():
     self.maps = {}
     self.sample_ratio = sample_ratio
     sample_count = math.ceil(len(self.seed_graph.nodes()) * self.sample_ratio)
+
     self.starting_index = starting_index
     running_index = copy.deepcopy(starting_index)
     bottom_tier = self.tiers[running_index]
@@ -39,3 +40,21 @@ class Tower():
       bottom_edge_count = len(bottom_tier.graph.edges()[0])
     self.ending_index = running_index
     self.length = len(self.tiers)
+
+  
+  def build_preimage_lookups(self, to_tower_attribute=False):
+    '''Method that returns a dictionary of "inverted maps", i.e., pre-image lookup dictionaries'''
+    preimage_lookups = {}
+    for index in self.maps:
+      map_dictionary = self.maps[index].partial_map
+      preimage_lookup = {}
+      for input_value in map_dictionary:
+        output_value =  map_dictionary[input_value]
+        if output_value in preimage_lookup:
+          preimage_lookup[output_value].append(input_value)
+        else:
+          preimage_lookup.update({output_value : [input_value]})
+      preimage_lookups.update({(index[1], index[0]) : preimage_lookup})
+    if to_tower_attribute == True:
+      self.preimage_lookups = preimage_lookups
+    return preimage_lookups

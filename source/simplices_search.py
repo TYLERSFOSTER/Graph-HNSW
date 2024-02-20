@@ -1,5 +1,3 @@
-
-
 '''Local project modules'''
 import tower
 
@@ -7,7 +5,7 @@ import tower
 '''
 Classes
 '''
-class SimplexBot():
+class Bot():
   '''Class representing bot that crawls up HNSW tower, searching for simplices below a fixed dimension'''
   def __init__(self,
                tower_to_search,
@@ -22,3 +20,5 @@ class SimplexBot():
     self.start_index = self.tower.starting_index
     self.end_index = self.tower.ending_index
     self.top_sSet = self.tower.tiers[self.start_index].sSet
+
+    self.preimage_lookups = self.tower.build_preimage_lookups()
