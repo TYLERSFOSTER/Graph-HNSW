@@ -29,7 +29,8 @@ class Tier():
     for i in range(0, dim_plus_one-1):
       for j in range(i+1, dim_plus_one):
         candidate_edge = [vertex_list[i], vertex_list[j]]
-        output *= (candidate_edge in self.edges)
+        if candidate_edge not in self.edges:
+          return False
     return output
 
   def name_simplex(self, vertex_list):
