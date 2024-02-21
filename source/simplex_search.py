@@ -39,18 +39,34 @@ class Bot():
         self.search_tier = self.tower.tiers[self.search_index]
         self.found_sSet = self.search_tier.sSet
         self.search_dimension = highest_completed_at_tier_above + 1
-    
 
-  def run(self, top_search_dimension=self.top_dimension):
-    self.top_dimension = top_search_dimension
-    self.update_parameters()
-    if self.search_dimension > self.top_dimension: # If our current search dimension is higher than our top dimension, then stop search
-      return
-    if self.search_index == self.bottommost_index: # In this case, our search space is the enite bottom tier, using the (k-1)-skeleton of `self.found_sSet`
-      search_space = {}
-    else: # In this case, we have to use our knowledge of the (k-1)-simplices in the tier below to narrow our search space
-      search_space = {}
-    '''The bulk of this function will be that previous algorithm that goes vertex-by-vertex checking if top verte of simplex...'''
-    
+
+'''
+Further functions and methods for above class(es)
+'''
+def raw(self):
+  '''Method for `Bot` that runs a "raw," i,e., "no HNSW" search for next incomplete dimension in a single tier, for searching bottommost tier of the tower'''
+  current_index = self.search_index
+  current_tier = self.search_tier
+  current_sSet = self.found_sSet
+  max_complete_dimension = self.completion_log[current_index]
+  if max_complete_dimension >= self.top_dimension:
+    return
+  else:
+    min_incomplete_dimension = max_complete_dimension - 1
+  '''Will write this next. This funciton is really just the search algorithm as it existed before HNSW...'''
+'''Give method `raw` to class `Bot`'''
+Bot.raw = raw
+  
+
+def run(self):
+  self.update_parameters()
+  if self.search_dimension > self.top_dimension: # If our current search dimension is higher than our top dimension, then stop search
+    return
+  if self.search_index == self.bottommost_index: # In this case, our search space is the enite bottom tier, using the (k-1)-skeleton of `self.found_sSet`
+    search_space = {}
+  else: # In this case, we have to use our knowledge of the (k-1)-simplices in the tier below to narrow our search space
+    search_space = {}
+  '''The bulk of this function will be that previous algorithm that goes vertex-by-vertex checking if top verte of simplex...'''
 
 
