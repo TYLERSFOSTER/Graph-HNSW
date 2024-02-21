@@ -15,58 +15,74 @@ class Bot():
     assert isinstance(top_search_dimension, int), 'Argument `top_search_dimension` must be a positive integer.'
     assert top_search_dimension > 0, 'Argument `top_search_dimension` must be a positive integer.'
     #-----------------------------------------
+    '''Attributes that do NOT change as Bot searches'''
     self.tower = tower_to_search
     self.top_dimension = top_search_dimension
     self.uppermost_index = self.tower.starting_index
     self.bottommost_index = self.tower.ending_index
-    self.top_sSet = self.tower.tiers[self.uppermost_index].sSet
     self.preimage_lookups = self.tower.build_preimage_lookups()
+    self.edge_aids = {tier_index : {} for tier_index in self.tower.tiers}
+    for tier_index in self.edge_aids:
+      current_tier = self.tower.tiers[tier_index]
+      current_edges = current_tier.vertices
+      current_vertices = current_tier.edges
+      self.edge_aids[tier_index] = {vertex : [] for vertex in current_vertices}
+      for edge in current_edges:
+        source_vertex = edge[0]
+        target_vertex = edge[1]
+        self.edge_aids[tier_index][target_vertex].append(source_vertex)
+    '''Attributes that change as Bot searches'''
     self.completion_log = {tier_index: 1 for tier_index in self.tower.tiers} # Because the simplicial set attached to each tier includes edges, the bot can start search at dimension 2
     self.search_index = self.bottommost_index # The bot holds attribute `Bot.search_index` that keeps track of the index wehre it last stopped its search
     self.search_tier = self.tower.tiers[self.search_index] # The bot holds attribute `Bot.search_tier` that keeps track of the tier where it last stopped its search
-    self.found_sSet = self.search_tier.sSet # The bot holds attribute `Bot.found_sSet` that keeps track of the tier where it last stopped its search
     self.search_dimension = 2 # The bot holds attribute `Bot.self.search_dimension` that keeps track of where its search halted
 
 
+  def raw(self):
+    '''Method for `Bot` that runs a "raw," i,e., "no HNSW" search for next incomplete dimension in current search tier. Intended as base, in bottom of tower, for HNSW search'''
+    current_tier_index = self.search_index
+    current_tier = self.search_tier
+    current_sSet = current_tier.sSet
+    max_complete_dimension = self.completion_log[current_tier_index]
+    current_simplices = current_sSet.simplices[max_complete_dimension]
+    if max_complete_dimension >= self.top_dimension:
+      return
+    '''The following triple loop is the major source of the latency of the "raw" algorithm.'''
+    for potential_top_vertex in current_tier.vertices:
+      source_vertices = self.edge_aids[current_tier_index][potential_top_vertex]
+      for simplex in current_simplices:
+        simplex_contained_in_source_vertices = True
+        for potential_source_vertex in simplex:
+          simplex_contained_in_source_vertices *= (potential_source_vertex in source_vertices)
+        if simplex_contained_in_source_vertices:
+          new_simplex = simplex + [potential_top_vertex]
+          '''It's critical to use  `include_all_subsimplices=False` in `nondegen_simplex` below to prevent a needless slowdown.'''
+          self.tower.tiers[current_tier_index].sSet.nondegen_simplex(new_simplex, include_all_subsimplices=False)
+    self.completion_log.update({current_tier_index: max_complete_dimension + 1})
+    self.search_dimension = max_complete_dimension + 1
+    if self.search_dimension > self.top_dimension:
+      if self.search_index > self.uppermost_index:
+        self.search_index = self.search_index - 1
+    self.search_tier = self.tower.tiers[self.search_index]
+  
+  
   def update_parameters(self):
     for difference in range(1, self.bottommost_index - self.uppermost_index+1):
       current_tier_index = self.bottommost_index - difference # We work with this index because we're moving up the tower, i.e., down in tier index
       above_tier_index = current_tier_index - 1
       highest_completed_at_this_tier = self.completion_log[current_tier_index]
-      highest_completed_at_tier_above = self.completion_log[cabove_tier_index]
+      highest_completed_at_tier_above = self.completion_log[above_tier_index]
       if highest_completed_at_tier_above < highest_completed_at_this_tier:
         self.search_index = above_tier_index
         self.search_tier = self.tower.tiers[self.search_index]
-        self.found_sSet = self.search_tier.sSet
         self.search_dimension = highest_completed_at_tier_above + 1
 
 
-'''
-Further functions and methods for above class(es)
-'''
-def raw(self):
-  '''Method for `Bot` that runs a "raw," i,e., "no HNSW" search for next incomplete dimension in a single tier, for searching bottommost tier of the tower'''
-  current_index = self.search_index
-  current_tier = self.search_tier
-  current_sSet = self.found_sSet
-  max_complete_dimension = self.completion_log[current_index]
-  if max_complete_dimension >= self.top_dimension:
-    return
-  else:
-    min_incomplete_dimension = max_complete_dimension - 1
-  '''Will write this next. This funciton is really just the search algorithm as it existed before HNSW...'''
-'''Give method `raw` to class `Bot`'''
-Bot.raw = raw
-  
-
-def run(self):
-  self.update_parameters()
-  if self.search_dimension > self.top_dimension: # If our current search dimension is higher than our top dimension, then stop search
-    return
-  if self.search_index == self.bottommost_index: # In this case, our search space is the enite bottom tier, using the (k-1)-skeleton of `self.found_sSet`
-    search_space = {}
-  else: # In this case, we have to use our knowledge of the (k-1)-simplices in the tier below to narrow our search space
-    search_space = {}
-  '''The bulk of this function will be that previous algorithm that goes vertex-by-vertex checking if top verte of simplex...'''
-
-
+  def run(self):
+    self.update_parameters()
+    if self.search_dimension > self.top_dimension: # If our current search dimension is higher than our top dimension, then stop search
+      return
+    if self.search_index == self.bottommost_index: # In this case, our search space is the enite bottom tier, using the (k-1)-skeleton of the bottom tier
+      search_space = {}
+    else: # In this case, we have to use our knowledge of the (k-1)-simplices in the tier below to narrow our search space
+      search_space = {}
