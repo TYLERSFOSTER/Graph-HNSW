@@ -44,6 +44,7 @@ class Bot():
     current_tier_index = self.search_index
     current_tier = self.search_tier
     current_sSet = current_tier.sSet
+    print('`current_sSet.simplices`:', current_sSet.simplices)
     max_complete_dimension = self.completion_log[current_tier_index]
     current_simplices = current_sSet.simplices[max_complete_dimension]
     if max_complete_dimension >= self.top_dimension:
