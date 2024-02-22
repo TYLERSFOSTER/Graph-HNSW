@@ -24,8 +24,8 @@ class Bot():
     self.edge_aids = {tier_index : {} for tier_index in self.tower.tiers}
     for tier_index in self.edge_aids:
       current_tier = self.tower.tiers[tier_index]
-      current_edges = current_tier.vertices
-      current_vertices = current_tier.edges
+      current_vertices = current_tier.vertices
+      current_edges = current_tier.edges
       self.edge_aids[tier_index] = {vertex : [] for vertex in current_vertices}
       for edge in current_edges:
         source_vertex = edge[0]
@@ -39,6 +39,7 @@ class Bot():
 
 
   def raw(self):
+    print(self.tower.tiers[self.bottommost_index].sSet.simplices)
     '''Method for `Bot` that runs a "raw," i,e., "no HNSW" search for next incomplete dimension in current search tier. Intended as base, in bottom of tower, for HNSW search'''
     current_tier_index = self.search_index
     current_tier = self.search_tier
@@ -64,6 +65,7 @@ class Bot():
       if self.search_index > self.uppermost_index:
         self.search_index = self.search_index - 1
     self.search_tier = self.tower.tiers[self.search_index]
+    print(self.tower.tiers[self.bottommost_index].sSet.simplices)
   
   
   def update_parameters(self):

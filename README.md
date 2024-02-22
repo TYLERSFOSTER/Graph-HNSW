@@ -4,7 +4,7 @@ Refactor of Graph HNSW scripts
 Run ```python3 testing.py``` at Linux command line, from the directory '/source', to execute a sequence of tests that run through all the basic functionality of the application.
 
 ### Next TODOs:
-- Build `simplices_search.py` module
+- Debug the method `raw` for `simplices_search.Bot`. This is suppose to be the base, no-HNSW search.
 - Solve issue: When edge contraction sampling ratio is too high, error occurs because graph collapses too fast.
 
 ## Some key ideas

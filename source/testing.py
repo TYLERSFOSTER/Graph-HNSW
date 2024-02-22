@@ -91,6 +91,11 @@ def random_contractions_test(edge_pair, n):
 def tower_length_test(edge_pair, ratio_value):
   current_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
 
+def raw_search_test(edge_pair, ratio_value):
+  test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
+  test_bot = simplex_search.Bot(test_tower)
+  test_bot.raw()
+
   
 '''
 Dictionary of calls for testing
@@ -117,6 +122,7 @@ call_dict = {
   'Test of `tower.Tower` on length-4 cycle graph ([0,1,2, 3], [1,2,3,0]) at edge contraction rate 0.5' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
   'Test of `tower.Tower.length` on length-7 cycle graph at edge contraction rate 0.2' : (tower_length_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2]),
   'Test of `simplices_search.Bot` instantiated from `tower.Tower` on length-7 cycle graph at edge contraction rate 0.2' : (simplex_search.Bot, [tower.Tower(dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])}), sample_ratio=.2)]),
+  'Test of `simplices_search.Bot.raw`' : (raw_search_test, [([0,1,2,3], [1,2,3,0]), .2]),
 }
 
 
