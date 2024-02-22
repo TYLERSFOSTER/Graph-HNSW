@@ -4,7 +4,7 @@ Refactor of Graph HNSW scripts
 Run ```python3 testing.py``` at Linux command line, from the directory '/source', to execute a sequence of tests that run through all the basic functionality of the application.
 
 ### Next TODOs:
-- Debug the method `raw` for `simplices_search.Bot`. This is suppose to be the base, no-HNSW search. I believe this is due to a failure of `tower.Tower` to built the 1-skeletons of its `tower.Tower.tiers[index].sSet` attributes.
+- Debug the method `raw` for `simplices_search.Bot`. This is suppose to be the base, no-HNSW search. I believe this is due to a failure of `tower.Tower` to built the 1-skeletons of its `tower.Tower.tiers[index].sSet` attributes. ...I added a test checking that `simplicial_set.grom_grap` works correctly on non-empty graphs, so I think the bug might be coming from the appearance of an empty graph at the bottom of the tower. Not sure. Need to invewtigate mores
 - Solve issue: When edge contraction sampling ratio is too high, error occurs because graph collapses too fast.
 
 ## Some key ideas
