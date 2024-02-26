@@ -23,16 +23,16 @@ class Bot():
     '''Remove bottom tier if trivial'''
     bottom_sparse_pair = self.tower.tiers[self.bottommost_index].edges
     if bottom_sparse_pair == []:
-      print('Bottom tier has collapsed to trivial graph.')
-      print('Removing bottom tier.')
-      print('Length of tower:', len(self.tower.tiers))
+      # print('Bottom tier has collapsed to trivial graph.')
+      # print('Removing bottom tier.')
+      # print('Length of tower:', len(self.tower.tiers))
       self.tower.tiers.pop(self.bottommost_index)
       self.tower.maps.pop((self.bottommost_index-1, self.bottommost_index))
       self.tower.ending_index = self.bottommost_index-1
       #print('Map keys:', [key for key in self.tower.maps])
       self.tower.length = len(self.tower.tiers)
-      print('Length of tower:', self.tower.length)
-      print('Bottom-most index:', self.bottommost_index)
+      # print('Length of tower:', self.tower.length)
+      # print('Bottom-most index:', self.bottommost_index)
       self.bottommost_index -= 1
 
     self.preimage_lookups = self.tower.build_preimage_lookups()
@@ -55,12 +55,12 @@ class Bot():
 
 
   def raw(self):
-    print(self.tower.tiers[self.bottommost_index].sSet.simplices)
+    #print(self.tower.tiers[self.bottommost_index].sSet.simplices)
     '''Method for `Bot` that runs a "raw," i,e., "no HNSW" search for next incomplete dimension in current search tier. Intended as base, in bottom of tower, for HNSW search'''
     current_tier_index = self.search_index
     current_tier = self.search_tier
     current_sSet = current_tier.sSet
-    print('`current_sSet.simplices`:', current_sSet.simplices)
+    #print('`current_sSet.simplices`:', current_sSet.simplices)
     max_complete_dimension = self.completion_log[current_tier_index]
     current_simplices = current_sSet.simplices[max_complete_dimension]
     if max_complete_dimension >= self.top_dimension:
