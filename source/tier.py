@@ -21,6 +21,8 @@ class Tier():
     self.edges = [[self.sparse_edges[0][k], self.sparse_edges[1][k]] for k in range(len(self.sparse_edges[0]))]
     self.graph = seed_graph
 
+    print('Graph pair:', self.edges)
+
   def simplex_present(self, vertex_list):
     dim_plus_one = len(vertex_list)
     output = True

@@ -19,7 +19,22 @@ class Bot():
     self.tower = tower_to_search
     self.top_dimension = top_search_dimension
     self.uppermost_index = self.tower.starting_index
-    self.bottommost_index = self.tower.ending_index
+    self.bottommost_index = self.tower.ending_index    
+    '''Remove bottom tier if trivial'''
+    bottom_sparse_pair = self.tower.tiers[self.bottommost_index].edges
+    if bottom_sparse_pair == []:
+      print('Bottom tier has collapsed to trivial graph.')
+      print('Removing bottom tier.')
+      print('Length of tower:', len(self.tower.tiers))
+      self.tower.tiers.pop(self.bottommost_index)
+      self.tower.maps.pop((self.bottommost_index-1, self.bottommost_index))
+      self.tower.ending_index = self.bottommost_index-1
+      #print('Map keys:', [key for key in self.tower.maps])
+      self.tower.length = len(self.tower.tiers)
+      print('Length of tower:', self.tower.length)
+      print('Bottom-most index:', self.bottommost_index)
+      self.bottommost_index -= 1
+
     self.preimage_lookups = self.tower.build_preimage_lookups()
     self.edge_aids = {tier_index : {} for tier_index in self.tower.tiers}
     for tier_index in self.edge_aids:
@@ -36,6 +51,7 @@ class Bot():
     self.search_index = self.bottommost_index # The bot holds attribute `Bot.search_index` that keeps track of the index wehre it last stopped its search
     self.search_tier = self.tower.tiers[self.search_index] # The bot holds attribute `Bot.search_tier` that keeps track of the tier where it last stopped its search
     self.search_dimension = 2 # The bot holds attribute `Bot.self.search_dimension` that keeps track of where its search halted
+
 
 
   def raw(self):
@@ -66,9 +82,8 @@ class Bot():
       if self.search_index > self.uppermost_index:
         self.search_index = self.search_index - 1
     self.search_tier = self.tower.tiers[self.search_index]
-    print(self.tower.tiers[self.bottommost_index].sSet.simplices)
-  
-  
+
+
   def update_parameters(self):
     for difference in range(1, self.bottommost_index - self.uppermost_index+1):
       current_tier_index = self.bottommost_index - difference # We work with this index because we're moving up the tower, i.e., down in tier index
