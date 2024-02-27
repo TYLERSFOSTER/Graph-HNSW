@@ -26,7 +26,7 @@ The reason *binary search*-type algorithms are able to speed up search-type task
 <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/inactive_vertices.jpg" alt="drawing" width="350"/>
 </p>
 
-### Simplex search
+### The graph-HNSW-based simplex search algorithm
 <p align="center">
 <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/search_order.jpg" alt="drawing" width="500"/>
 </p>
