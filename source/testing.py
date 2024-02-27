@@ -100,7 +100,6 @@ def tower_length_test(edge_pair, ratio_value):
 def raw_search_test(edge_pair, ratio_value):
   test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
   test_bot = simplex_search.Bot(test_tower)
-  # print('Bot ready for non-HNSW run.')
   test_bot.top_dimension = 2
   test_bot.search_index = 0
   test_bot.search_dimension = 2
@@ -109,7 +108,6 @@ def raw_search_test(edge_pair, ratio_value):
 def double_raw_search_test(edge_pair, ratio_value):
   test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
   test_bot = simplex_search.Bot(test_tower)
-  # print('Bot ready for non-HNSW run.')
   test_bot.top_dimension = 2
   test_bot.search_index = 0
   test_bot.search_dimension = 2
