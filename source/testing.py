@@ -105,7 +105,7 @@ def raw_search_test(edge_pair, ratio_value):
   test_bot.search_dimension = 2
   test_bot.raw()
 
-def double_raw_search_test(edge_pair, ratio_value):
+def triple_raw_search_test(edge_pair, ratio_value):
   test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
   test_bot = simplex_search.Bot(test_tower)
   test_bot.top_dimension = 2
@@ -114,6 +114,17 @@ def double_raw_search_test(edge_pair, ratio_value):
   test_bot.raw()
   test_bot.raw()
   test_bot.raw()
+
+def run_search_test(edge_pair, ratio_value):
+  test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
+  test_bot = simplex_search.Bot(test_tower)
+  test_bot.top_dimension = 2
+  test_bot.search_index = 0
+  test_bot.search_dimension = 2
+  test_bot.raw()
+  test_bot.raw()
+  test_bot.raw()
+  test_bot.run()
 
   
 '''
@@ -142,8 +153,9 @@ call_dict = {
   'Test of `tower.Tower` on length-4 cycle graph ([0,1,2, 3], [1,2,3,0]) at edge contraction rate 0.5' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})]),
   'Test of `tower.Tower.length` on length-7 cycle graph at edge contraction rate 0.2' : (tower_length_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2]),
   'Test of `simplices_search.Bot` instantiated from `tower.Tower` on length-7 cycle graph at edge contraction rate 0.2' : (simplex_search.Bot, [tower.Tower(dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])}), sample_ratio=.2)]),
-  'Test of `simplices_search.Bot.raw`' : (raw_search_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2]),
-  'Test of `simplices_search.Bot.raw` when 2-simplices are present' : (double_raw_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2]),
+  'Test of `simplices_search.Bot.raw` when 2-simplices are present' : (raw_search_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2]),
+  'Test of repeated application of `simplices_search.Bot.raw` when 2-simplices are present' : (triple_raw_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2]),
+  'Test of `simplices_search.Bot.run` repeated application of `simplices_search.Bot.raw`' : (run_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2]),
 }
 
 

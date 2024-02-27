@@ -48,14 +48,18 @@ class Bot():
   
   def update_parameters(self):
     '''Method that checks attributes of the search bot `self`, making sure that `self.search_index` and `self.search_dimension`'''
-    for difference in range(1, self.bottommost_index - self.uppermost_index+1):
+    '''The main `for` loop runs UP the tower, from bottom-most tier to tier just below upper-most tier:'''
+    for difference in range(0, self.bottommost_index - self.uppermost_index):
       current_tier_index = self.bottommost_index - difference # We work with this index because we're moving up the tower, i.e., down in tier index
       above_tier_index = current_tier_index - 1
       highest_completed_at_this_tier = self.completion_log[current_tier_index]
       highest_completed_at_tier_above = self.completion_log[above_tier_index]
+      '''The `if` block checks if current tier is more complete than above tier. If so, we switch to above tier, ready to search at its lowest incomplete dimension:'''
       if highest_completed_at_tier_above < highest_completed_at_this_tier:
-        self.search_index = above_tier_index
         self.search_dimension = highest_completed_at_tier_above + 1
+        self.search_index = above_tier_index
+      elif highest_completed_at_tier_above >= highest_completed_at_this_tier:
+        self.search_dimension = highest_completed_at_this_tier + 1
 
 
   def raw(self):
