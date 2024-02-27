@@ -23,15 +23,15 @@ class Bot():
     '''Remove bottom tier if trivial'''
     bottom_sparse_pair = self.tower.tiers[self.bottommost_index].edges
     if bottom_sparse_pair == []:
-      print('Length of tower:', len(self.tower.tiers))
-      print('Bottom tier has collapsed to trivial graph.')
-      print('Removing bottom tier.')
+      # print('Length of tower:', len(self.tower.tiers))
+      # print('Bottom tier has collapsed to trivial graph.')
+      # print('Removing bottom tier.')
       self.tower.tiers.pop(self.bottommost_index)
       self.tower.maps.pop((self.bottommost_index-1, self.bottommost_index))
-      print('Map keys:', [key for key in self.tower.maps])
+      # print('Map keys:', [key for key in self.tower.maps])
       self.tower.length = len(self.tower.tiers)
-      print('Length of tower:', self.tower.length)
-      print('Bottom-most index:', self.bottommost_index)
+      # print('Length of tower:', self.tower.length)
+      # print('Bottom-most index:', self.bottommost_index)
       self.bottommost_index -= 1
       self.tower.ending_index = self.bottommost_index
 
@@ -55,36 +55,36 @@ class Bot():
   def raw(self):
     #print(self.tower.tiers[self.bottommost_index].sSet.simplices)
     '''Method for `Bot` that runs a "raw," i,e., "no HNSW" search for next incomplete dimension in current search tier. Intended as base, in bottom of tower, for HNSW search'''
-    print('New raw search run started.')
-    print('   `Bot.search_index` (tier to search):', self.search_index)
-    print('   `Bot.search_dimension` (dimension to search):', self.search_dimension)
-    print('   `self.tower.tiers[self.search_index].sSet.simplices`:', self.tower.tiers[self.search_index].sSet.simplices)
+    # print('New raw search run started.')
+    # print('   `Bot.search_index` (tier to search):', self.search_index)
+    # print('   `Bot.search_dimension` (dimension to search):', self.search_dimension)
+    # print('   `self.tower.tiers[self.search_index].sSet.simplices`:', self.tower.tiers[self.search_index].sSet.simplices)
     max_complete_dimension = self.completion_log[self.search_index]
     self.search_dimension = max_complete_dimension + 1
-    print('   `max_complete_dimension`:', max_complete_dimension)
-    print('   `Bot.search_dimension`:', self.search_dimension)
+    # print('   `max_complete_dimension`:', max_complete_dimension)
+    # print('   `Bot.search_dimension`:', self.search_dimension)
     '''If `self.tower.tiers[self.search_index].sSet.simplices` doesn't have `self.search_dimension` as a key yet, we update `self.tower.tiers[self.search_index].sSet.simplices` with this missing key'''
     if self.search_dimension not in self.tower.tiers[self.search_index].sSet.simplices:
-      print('      Key missing from `self.tower.tiers[self.search_index].sSet.simplices`:', self.search_dimension)
+      # print('      Key missing from `self.tower.tiers[self.search_index].sSet.simplices`:', self.search_dimension)
       self.tower.tiers[self.search_index].sSet.simplices.update({self.search_dimension: []})
-      if self.search_dimension in self.tower.tiers[self.search_index].sSet.simplices:
-        print('      Missing key {} added to dictionary'.format(self.search_dimension))
-        print('      Currently found simplices:', self.tower.tiers[self.search_index].sSet.simplices)
+      # if self.search_dimension in self.tower.tiers[self.search_index].sSet.simplices:
+        # print('      Missing key {} added to dictionary'.format(self.search_dimension))
+        # print('      Currently found simplices:', self.tower.tiers[self.search_index].sSet.simplices)
     current_simplices = self.tower.tiers[self.search_index].sSet.simplices[max_complete_dimension]
     if self.search_dimension > self.top_dimension:
       return
     '''The following triple loop is the major source of the latency of the "raw" algorithm.'''
     for potential_top_vertex in self.tower.tiers[self.search_index].vertices:
-      print('         Current `potential_top_vertices`:', potential_top_vertex)
-      print('         Current `self.edge_aids`:', self.edge_aids)
+      # print('         Current `potential_top_vertices`:', potential_top_vertex)
+      # print('         Current `self.edge_aids`:', self.edge_aids)
       source_vertices = self.edge_aids[self.search_index][potential_top_vertex]
-      print('         Current `source_vertices`:', source_vertices)
+      # print('         Current `source_vertices`:', source_vertices)
       for simplex in current_simplices:
-        print('            Current `simplex`:', simplex)
+        # print('            Current `simplex`:', simplex)
         simplex_contained_in_source_vertices = True
         for potential_source_vertex in simplex:
           new_proposition = (potential_source_vertex in source_vertices)
-          print('               Value of `potential_source_vertex in source_vertices`:', new_proposition)
+          # print('               Value of `potential_source_vertex in source_vertices`:', new_proposition)
           simplex_contained_in_source_vertices *= (potential_source_vertex in source_vertices)
         if simplex_contained_in_source_vertices:
           new_simplex = simplex + [potential_top_vertex]
@@ -94,7 +94,7 @@ class Bot():
     if self.search_dimension > self.top_dimension:
       if self.search_index > self.uppermost_index:
         self.search_index = self.search_index - 1
-    print('   Post raw search run `self.tower.tiers[self.search_index].sSet.simplices`:', self.tower.tiers[self.search_index].sSet.simplices)
+    # print('   Post raw search run `self.tower.tiers[self.search_index].sSet.simplices`:', self.tower.tiers[self.search_index].sSet.simplices)
 
 
   def update_parameters(self):
