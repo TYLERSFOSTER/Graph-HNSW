@@ -28,5 +28,5 @@ The reason *binary search*-type algorithms are able to speed up search-type task
 
 ### Simplex search
 <p align="center">
-<img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/search_order.jpg" alt="drawing" width="350"/>
+<img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/search_order.jpg" alt="drawing" width="450"/>
 </p>
