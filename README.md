@@ -5,7 +5,7 @@ Run ```python3 testing.py``` at Linux command line, from the directory '/source'
 
 ### Next TODOs:
 
-- Finish `simplex_search.Bot.raw`
+- Finish `simplex_search.Bot.raw` (I think I did this and debugged it, but need to check some more. - Tyler
 
 ## Some key ideas
 ### Basic idea behind the application: A platform for generalizations of binary search to finite directed graphs.
