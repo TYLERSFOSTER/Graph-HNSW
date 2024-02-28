@@ -60,6 +60,8 @@ class Bot():
         self.search_index = above_tier_index
       elif highest_completed_at_tier_above >= highest_completed_at_this_tier:
         self.search_dimension = highest_completed_at_this_tier + 1
+    print('Updated tier index to search:', self.search_index)
+    print('Updated dimension to search:', self.search_dimension)
 
 
   def raw(self):
@@ -72,7 +74,7 @@ class Bot():
     current_simplices = self.tower.tiers[self.search_index].sSet.simplices[max_complete_dimension]
     if self.search_dimension > self.top_dimension:
       return
-    '''The following triple loop is the major source of the latency of the "raw" algorithm.'''
+    '''The following triple loop is the major source of the time complexity of the `raw` algorithm.'''
     for potential_top_vertex in self.tower.tiers[self.search_index].vertices:
       source_vertices = self.edge_aids[self.search_index][potential_top_vertex]
       for simplex in current_simplices:
@@ -82,20 +84,26 @@ class Bot():
           simplex_contained_in_source_vertices *= (potential_source_vertex in source_vertices)
         if simplex_contained_in_source_vertices:
           new_simplex = simplex + [potential_top_vertex]
-          '''It's critical to use  `include_all_subsimplices=False` in `nondegen_simplex` below to prevent a needless slowdown.'''
-          self.tower.tiers[self.search_index].sSet.nondegen_simplex(new_simplex, include_all_subsimplices=False)
+          self.tower.tiers[self.search_index].sSet.nondegen_simplex(new_simplex, include_all_subsimplices=False) # IMPORTANT: `include_all_subsimplices=False`
     self.completion_log.update({self.search_index: self.search_dimension})
-    if self.search_dimension > self.top_dimension:
-      if self.search_index > self.uppermost_index:
-        self.search_index = self.search_index - 1
+    # if self.search_dimension > self.top_dimension and self.search_index > self.uppermost_index):
+    #   self.search_index = self.search_index - 1
 
 
   def run(self):
-    self.update_parameters()
-    '''If our current search dimension is higher than our top search dimension, then stop search'''
-    if self.search_dimension > self.top_dimension:
-      return
-    '''Start with full search for simplices up to `self.top_dimension` on the bottom tier `self.tower.tiers[self.bottommost_index]`.'''
-    while self.search_index == self.bottommost_index and self.search_dimension <= self.top_dimension:
-      self.raw()
+    counter = 0
+    while min([self.completion_log[k] for k in self.completion_log]) < self.top_dimension:
+      print('Completion log:', self.completion_log)
       self.update_parameters()
+      if self.search_index == self.bottommost_index:
+        self.raw()
+      else:
+        max_downstairs_dimension = self.completion_log[self.search_index + 1]
+        for d in range(0, max_downstairs_dimension + 1):
+          current_downstairs_simplices = self.tower.tiers[self.search_index + 1].sSet.simplices[d]
+
+      counter += 1
+      if counter > 10:
+        print('There seems to be an infinite loop present.')
+        break
+        

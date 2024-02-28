@@ -121,9 +121,6 @@ def run_search_test(edge_pair, ratio_value):
   test_bot.top_dimension = 2
   test_bot.search_index = 0
   test_bot.search_dimension = 2
-  test_bot.raw()
-  test_bot.raw()
-  test_bot.raw()
   test_bot.run()
 
   
