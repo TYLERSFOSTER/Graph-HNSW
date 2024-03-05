@@ -117,10 +117,9 @@ def triple_raw_search_test(edge_pair, ratio_value):
 
 def run_search_test(edge_pair, ratio_value):
   test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
+  print(len(test_tower.tiers))
   test_bot = simplex_search.Bot(test_tower)
-  test_bot.top_dimension = 2
-  test_bot.search_index = 0
-  test_bot.search_dimension = 2
+  test_bot.top_dimension = 3
   test_bot.run()
 
   

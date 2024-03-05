@@ -1,3 +1,5 @@
+import copy
+
 '''Local project modules'''
 import tower
 
@@ -45,29 +47,59 @@ class Bot():
     self.search_index = self.bottommost_index # The bot holds attribute `Bot.search_index` that keeps track of the index wehre it last stopped its search
     self.search_dimension = 2 # The bot holds attribute `Bot.self.search_dimension` that keeps track of where its search halted
 
+
+  def print_parameters(self):
+    print('Search index:', self.search_index)
+    print('Search dimension:', self.search_dimension)
+
   
+  def bottom_out_parameters(self):
+    self.search_index = copy.deepcopy(self.bottommost_index)
+    self.search_dimension = 0
+
+
   def update_parameters(self):
     '''Method that checks attributes of the search bot `self`, making sure that `self.search_index` and `self.search_dimension`'''
     '''The main `for` loop runs UP the tower, from bottom-most tier to tier just below upper-most tier:'''
+    # k = copy.deepcopy(self.search_index)
+    # d = copy.deepcopy(self.search_dimension)
+    #print('Search index at start of update:', self.search_index)
+    #print('Search dimension at start of update:', self.search_dimension)
+    self.bottom_out_parameters()
     for difference in range(0, self.bottommost_index - self.uppermost_index):
       current_tier_index = self.bottommost_index - difference # We work with this index because we're moving up the tower, i.e., down in tier index
       above_tier_index = current_tier_index - 1
-      highest_completed_at_this_tier = self.completion_log[current_tier_index]
-      highest_completed_at_tier_above = self.completion_log[above_tier_index]
+      #print('Current difference:', difference)
+      #print('Current tier index:', current_tier_index)
+      #print('Above tier index:', above_tier_index)
       '''The `if` block checks if current tier is more complete than above tier. If so, we switch to above tier, ready to search at its lowest incomplete dimension:'''
-      if highest_completed_at_tier_above < highest_completed_at_this_tier:
-        self.search_dimension = highest_completed_at_tier_above + 1
+      if self.completion_log[above_tier_index] < self.completion_log[current_tier_index]:
+        #print('Case: upstairs max completed dimension < current max completed dimension')
+        self.search_dimension = self.completion_log[above_tier_index] + 1
         self.search_index = above_tier_index
-      elif highest_completed_at_tier_above >= highest_completed_at_this_tier:
-        self.search_dimension = highest_completed_at_this_tier + 1
-    print('Updated tier index to search:', self.search_index)
-    print('Updated dimension to search:', self.search_dimension)
+        break
+      elif self.completion_log[above_tier_index] == self.completion_log[current_tier_index]:
+        #print('Case: upstairs max completed dimension == current max completed dimension')
+        self.search_index = above_tier_index
+        if self.search_index == self.uppermost_index:
+          self.search_dimension = self.completion_log[current_tier_index] + 1
+          self.search_index = self.bottommost_index
+          break
+      elif self.completion_log[above_tier_index] > self.completion_log[current_tier_index]:
+        #print('Case: upstairs max completed dimension > current max completed dimension')
+        self.search_dimension = self.completion_log[current_tier_index] + 1
+        self.search_index = current_tier_index
+        break
+    #print('Search index at end of update:', self.search_index)
+    #print('Search dimension at end of update:', self.search_dimension)
 
 
   def raw(self):
+    #print('   Starting raw search.')
+    #print('Top dimension:', self.top_dimension)
     '''Method for `Bot` that runs a "raw," i,e., "no HNSW" search for next incomplete dimension in current search tier. Intended as base, in bottom of tower, for HNSW search'''
     max_complete_dimension = self.completion_log[self.search_index]
-    self.search_dimension = max_complete_dimension + 1
+    self.search_dimension = self.completion_log[self.search_index] + 1
     '''If `self.tower.tiers[self.search_index].sSet.simplices` doesn't have `self.search_dimension` as a key yet, we update `self.tower.tiers[self.search_index].sSet.simplices` with this missing key'''
     if self.search_dimension not in self.tower.tiers[self.search_index].sSet.simplices:
       self.tower.tiers[self.search_index].sSet.simplices.update({self.search_dimension: []})
@@ -91,16 +123,53 @@ class Bot():
 
 
   def run(self):
+    self.bottom_out_parameters()
+    self.update_parameters()
+    print('\n\n\n\n\n____________________________________________________________________')
+    print('____________________________________________________________________')
+    print('\nRetrieving Bot parameters at start of `run` search...')
+    print('Completion log at start of `run` search:', self.completion_log)
+    self.print_parameters()
     counter = 0
     while min([self.completion_log[k] for k in self.completion_log]) < self.top_dimension:
-      print('Completion log:', self.completion_log)
+      print('\n\n\n__________________________________')
+      print('New cycle of `run`\'s `while` loop.')
+      if counter != 0:
+        print('\nRetrieving Bot parameters at start of this cycle...')
+        print('Completion log at start of this cycle:', self.completion_log)
+        self.print_parameters()
+      print('\nUpdating Bot parameters at start of this cycle...')
       self.update_parameters()
+      self.print_parameters()
       if self.search_index == self.bottommost_index:
+        print('\nRunning `raw` search...')
         self.raw()
+        print('`raw` search complete.')
+        print('\nRetrieving Bot parameters after `raw` search...')
+        print('Completion log at start of this cycle:', self.completion_log)
+        self.print_parameters()
       else:
+        print('\nExecuting subblock to run informed search for simplices in tier {}, based on tier {}...'.format(self.search_index, self.search_index+1))
+        print('Completion log at start of this cycle:', self.completion_log)
+        present_tier_dimension = self.completion_log[self.search_index]
+        print('Max dimension completed in present tier:', present_tier_dimension)
+        #print('Index:', self.search_index + 1)
         max_downstairs_dimension = self.completion_log[self.search_index + 1]
-        for d in range(0, max_downstairs_dimension + 1):
-          current_downstairs_simplices = self.tower.tiers[self.search_index + 1].sSet.simplices[d]
+        print('Max dimension completed in lower tier:', max_downstairs_dimension)
+        # if present_tier_dimension >= max_downstairs_dimension:
+        #   print('BAD BUG!!!')
+        for d in range(present_tier_dimension + 1, max_downstairs_dimension + 1):
+          print('\nExecuting cycle of `for` loop within subblock, searching for dimension {} in tier {}...'.format(d, self.search_index, self.search_index, self.bottommost_index))
+          print('Retrieving Bot parameters after `raw` search...')
+          print('Completion log at start of this cycle:', self.completion_log)
+          self.print_parameters()
+          downstairs_simplices = self.tower.tiers[self.search_index + 1].sSet.simplices
+          print('Length of `downstairs_simplices`:', len(downstairs_simplices))
+          print('`downstairs_simplices`:', downstairs_simplices)
+
+          print('\nCycle of `for` loop in `while` subblock now complete.')
+      print('\nCycle of `while` loop now complete.')
+      print('__________________________________')
 
       counter += 1
       if counter > 10:
