@@ -1,6 +1,7 @@
 import copy
 
 '''Local project modules'''
+import helpers
 import tower
 
 
@@ -51,6 +52,7 @@ class Bot():
   def print_parameters(self):
     print('Search index:', self.search_index)
     print('Search dimension:', self.search_dimension)
+    print('Simplicial set at this tier:', self.tower.tiers[self.search_index].sSet.simplices)
 
   
   def bottom_out_parameters(self):
@@ -159,6 +161,8 @@ class Bot():
         # if present_tier_dimension >= max_downstairs_dimension:
         #   print('BAD BUG!!!')
         for d in range(present_tier_dimension + 1, max_downstairs_dimension + 1):
+          if self.search_dimension not in self.tower.tiers[self.search_index].sSet.simplices:
+            self.tower.tiers[self.search_index].sSet.simplices.update({self.search_dimension : []})
           print('\nExecuting cycle of `for` loop within subblock, searching for dimension {} in tier {}...'.format(d, self.search_index, self.search_index, self.bottommost_index))
           print('Retrieving Bot parameters after `raw` search...')
           print('Completion log at start of this cycle:', self.completion_log)
@@ -166,13 +170,13 @@ class Bot():
           downstairs_simplices = self.tower.tiers[self.search_index + 1].sSet.simplices
           print('Length of `downstairs_simplices`:', len(downstairs_simplices))
           print('`downstairs_simplices`:', downstairs_simplices)
-
+          current_partitions = helpers.all_partitions([v for v in range(d+1)])
           print('\nCycle of `for` loop in `while` subblock now complete.')
       print('\nCycle of `while` loop now complete.')
       print('__________________________________')
 
       counter += 1
-      if counter > 10:
+      if counter > 2:
         print('There seems to be an infinite loop present.')
         break
         

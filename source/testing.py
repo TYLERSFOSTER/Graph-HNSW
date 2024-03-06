@@ -129,6 +129,9 @@ Dictionary of calls for testing
 call_dict = {
   'Test of `reverse_dictionary` on {1:2, 2:3, 3:2}' : (reverse_dictionary_test, []),
   'Test of `downshift_above(m, n)` for m > n' : (downshift_test, [6, 5]),
+  'Test of `helpers.one_more_cut` on the list `[[0,1], [2,3,4]]`' : (helpers.one_more_cut, [[[0,1], [2,3,4]]]),
+  'Test of `helpers.one_more_cut` on the list `[[0,1,2,3,4]]`' : (helpers.one_more_cut, [[[0,1,2,3,4]]]),
+  'Test of `helpers.all_partitions` on the list `[0,1,2,3,4,5,6,7,8,9]`' : (helpers.all_partitions, [[0,1,2,3,4,5,6,7,8,9]]),
   'Test of `simplicial_set.all_sublists` on `[\'x\',\'y\',\'z\']`' : (helpers.all_sublists, [['x','y','z']]),
   'Test of `helpers.max_index` on {1:2, 2:3, 3:2}' : (helpers.max_key, [{1:2, 2:3, 3:2}]),
   'Test of free instantiation of `simplicial_set.NonDegenSSet`' : (simplicial_set.NonDegenSSet, []),
