@@ -50,11 +50,13 @@ class Tower():
       preimage_lookup = {}
       for input_value in map_dictionary:
         output_value =  map_dictionary[input_value]
-        if output_value in preimage_lookup:
-          preimage_lookup[output_value].append(input_value)
-        else:
-          preimage_lookup.update({output_value : [input_value]})
+        if output_value in preimage_lookup: preimage_lookup[output_value].append(input_value)
+        else: preimage_lookup.update({output_value : [input_value]})
       preimage_lookups.update({(index[1], index[0]) : preimage_lookup})
-    if to_tower_attribute == True:
-      self.preimage_lookups = preimage_lookups
+    if to_tower_attribute == True: self.preimage_lookups = preimage_lookups
     return preimage_lookups
+  
+
+  def include_loops(self):
+    tier_indices = [index for index in self.tiers]
+    for tier_index in tier_indices: self.tiers[tier_index].include_loops()

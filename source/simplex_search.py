@@ -19,6 +19,7 @@ class Bot():
     assert top_search_dimension > 0, 'Argument `top_search_dimension` must be a positive integer.'
     #-----------------------------------------
     '''Attributes that do NOT change as Bot searches'''
+    tower_to_search.include_loops()
     self.tower = tower_to_search
     self.top_dimension = top_search_dimension
     self.uppermost_index = self.tower.starting_index
@@ -47,6 +48,7 @@ class Bot():
     self.completion_log = {tier_index: 1 for tier_index in self.tower.tiers} # Because the simplicial set attached to each tier includes edges, the bot can start search at dimension 2
     self.search_index = self.bottommost_index # The bot holds attribute `Bot.search_index` that keeps track of the index wehre it last stopped its search
     self.search_dimension = 2 # The bot holds attribute `Bot.self.search_dimension` that keeps track of where its search halted
+    
 
 
   def print_parameters(self):
@@ -63,42 +65,28 @@ class Bot():
   def update_parameters(self):
     '''Method that checks attributes of the search bot `self`, making sure that `self.search_index` and `self.search_dimension`'''
     '''The main `for` loop runs UP the tower, from bottom-most tier to tier just below upper-most tier:'''
-    # k = copy.deepcopy(self.search_index)
-    # d = copy.deepcopy(self.search_dimension)
-    #print('Search index at start of update:', self.search_index)
-    #print('Search dimension at start of update:', self.search_dimension)
     self.bottom_out_parameters()
     for difference in range(0, self.bottommost_index - self.uppermost_index):
       current_tier_index = self.bottommost_index - difference # We work with this index because we're moving up the tower, i.e., down in tier index
       above_tier_index = current_tier_index - 1
-      #print('Current difference:', difference)
-      #print('Current tier index:', current_tier_index)
-      #print('Above tier index:', above_tier_index)
       '''The `if` block checks if current tier is more complete than above tier. If so, we switch to above tier, ready to search at its lowest incomplete dimension:'''
       if self.completion_log[above_tier_index] < self.completion_log[current_tier_index]:
-        #print('Case: upstairs max completed dimension < current max completed dimension')
         self.search_dimension = self.completion_log[above_tier_index] + 1
         self.search_index = above_tier_index
         break
       elif self.completion_log[above_tier_index] == self.completion_log[current_tier_index]:
-        #print('Case: upstairs max completed dimension == current max completed dimension')
         self.search_index = above_tier_index
         if self.search_index == self.uppermost_index:
           self.search_dimension = self.completion_log[current_tier_index] + 1
           self.search_index = self.bottommost_index
           break
       elif self.completion_log[above_tier_index] > self.completion_log[current_tier_index]:
-        #print('Case: upstairs max completed dimension > current max completed dimension')
         self.search_dimension = self.completion_log[current_tier_index] + 1
         self.search_index = current_tier_index
         break
-    #print('Search index at end of update:', self.search_index)
-    #print('Search dimension at end of update:', self.search_dimension)
 
 
   def raw(self):
-    #print('   Starting raw search.')
-    #print('Top dimension:', self.top_dimension)
     '''Method for `Bot` that runs a "raw," i,e., "no HNSW" search for next incomplete dimension in current search tier. Intended as base, in bottom of tower, for HNSW search'''
     max_complete_dimension = self.completion_log[self.search_index]
     self.search_dimension = self.completion_log[self.search_index] + 1
@@ -106,8 +94,7 @@ class Bot():
     if self.search_dimension not in self.tower.tiers[self.search_index].sSet.simplices:
       self.tower.tiers[self.search_index].sSet.simplices.update({self.search_dimension: []})
     current_simplices = self.tower.tiers[self.search_index].sSet.simplices[max_complete_dimension]
-    if self.search_dimension > self.top_dimension:
-      return
+    if self.search_dimension > self.top_dimension: return
     '''The following triple loop is the major source of the time complexity of the `raw` algorithm.'''
     for potential_top_vertex in self.tower.tiers[self.search_index].vertices:
       source_vertices = self.edge_aids[self.search_index][potential_top_vertex]
@@ -118,10 +105,8 @@ class Bot():
           simplex_contained_in_source_vertices *= (potential_source_vertex in source_vertices)
         if simplex_contained_in_source_vertices:
           new_simplex = simplex + [potential_top_vertex]
-          self.tower.tiers[self.search_index].sSet.nondegen_simplex(new_simplex, include_all_subsimplices=False) # IMPORTANT: `include_all_subsimplices=False`
+          self.tower.tiers[self.search_index].sSet.catalog_simplex(new_simplex, include_all_subsimplices=False, outlaw_degenerate_simplices=False) # IMPORTANT: `include_all_subsimplices=False`
     self.completion_log.update({self.search_index: self.search_dimension})
-    # if self.search_dimension > self.top_dimension and self.search_index > self.uppermost_index):
-    #   self.search_index = self.search_index - 1
 
 
   def run(self):

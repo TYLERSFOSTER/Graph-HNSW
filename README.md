@@ -26,6 +26,12 @@ The reason *binary search*-type algorithms are able to speed up search-type task
 <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/inactive_vertices.jpg" alt="drawing" width="350"/>
 </p>
 
+### Degenerate simplices and loops.
+If we are unwilling to keep track of degenerate simplices, then it becomess difficult to carry out a graph-HNSW search that finds all simplices implicit in a given graph.
+This is because maps in the graph-HNSW tower can map simplices in a given tier of the tower down to degenerate simplices in the tier immediately  below.
+This implies that iIf we hope to detect, downstairs, regions of the graph over which simplices might lie upstairs, then we have to be willing to keep track of degenerate simplices as we fill out the simplicial set associated to the downstairs tier.
+
+
 ### The graph-HNSW-based simplex search algorithm
 <p align="center">
 <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/search_order.jpg" alt="drawing" width="500"/>

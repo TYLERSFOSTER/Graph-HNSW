@@ -14,14 +14,16 @@ class Tier():
   '''Class representing a single "tier" or "level" in a graph HNSW tower.'''
   def __init__(self,
                seed_graph,
+               include_loops=False,
                ):
     self.sSet = simplicial_set.from_graph(seed_graph)
     self.vertices = self.sSet.extract_vertices()
     self.sparse_edges = self.sSet.extract_edges()
     self.edges = [[self.sparse_edges[0][k], self.sparse_edges[1][k]] for k in range(len(self.sparse_edges[0]))]
     self.graph = seed_graph
-
-    #print('List of edges in this tier:', self.edges)
+    if include_loops:
+      self.include_loops()
+    
 
   def simplex_present(self, vertex_list):
     dim_plus_one = len(vertex_list)
@@ -32,10 +34,10 @@ class Tier():
         output *= (candidate_edge in self.edges)
     return output
 
+
   def name_simplex(self, vertex_list):
     is_present = self.simplex_present(vertex_list)
-    if is_present:
-      self.sSet.nondegen_simplex(vertex_list)
+    if is_present: self.sSet.catalog_simplex(vertex_list)
 
       
 class Tier_Map():
@@ -46,7 +48,6 @@ class Tier_Map():
                ):
     assert isinstance(tier_upstairs, Tier)
     assert isinstance(tier_downstairs, Tier)
-    #-----------------------------------------
     self.upstairs = tier_upstairs
     self.upstairs_vertices = self.upstairs.vertices
     self.downstairs = tier_downstairs
@@ -72,8 +73,7 @@ def contract_edge(self, contracting_edge):
   for edge in old_edge_list:
     new_edge = copy.deepcopy(edge)
     for i in [0,1]:
-      if edge[i] == contracting_edge[0]:
-        new_edge[i] = contracting_edge[1]
+      if edge[i] == contracting_edge[0]: new_edge[i] = contracting_edge[1]
     new_vertex_list += new_edge
     if (new_edge[0] != new_edge[1]) and ([new_edge[0], new_edge[1]] not in new_STpair_list):
       new_STpair_list.append([new_edge[0], new_edge[1]])
@@ -86,12 +86,9 @@ def contract_edge(self, contracting_edge):
   output_tier = Tier(new_seed_graph)
   output_map = Tier_Map(self, output_tier)
   for index in self.vertices:
-    if index != contracting_edge[0]:
-      output_map.partial_map.update({index : helpers.downshift_above(index, contracting_edge[0])})
-    else:
-      output_map.partial_map.update({contracting_edge[0] : helpers.downshift_above(contracting_edge[1], contracting_edge[0])})
+    if index != contracting_edge[0]: output_map.partial_map.update({index : helpers.downshift_above(index, contracting_edge[0])})
+    else: output_map.partial_map.update({contracting_edge[0] : helpers.downshift_above(contracting_edge[1], contracting_edge[0])})
   return output_tier, output_map
-'''Give method `contract_edge` to class `Tier`'''
 Tier.contract_edge = contract_edge
 
 
@@ -100,7 +97,6 @@ def contract_random_edge(self):
   contracting_edge = random.sample(all_edges, 1)[0]
   output_tier, output_map = self.contract_edge(contracting_edge)
   return output_tier, output_map
-'''Give method `contract_random_edge` to class `Tier`'''
 Tier.contract_random_edge = contract_random_edge
 
 
@@ -108,9 +104,7 @@ def compose_maps(*args):
   assert len(args) > 0
   for k, tier_map in enumerate(args):
     assert isinstance(tier_map, Tier_Map)
-    if k < len(args)-1:
-      assert tier_map.downstairs == args[k+1].upstairs
-  #-----------------------------------------
+    if k < len(args)-1: assert tier_map.downstairs == args[k+1].upstairs
   initial_values = args[0].upstairs.vertices
   composite_map = {key : key for key in initial_values}
   composite_input = list(composite_map.keys())
@@ -133,7 +127,6 @@ def random_contractions(self, n):
   assert len(self.edges) >= n, 'Graph must have at least n edges if we plan to contract n edges.'
   assert isinstance(n, int)
   assert n > 0
-  #-----------------------------------------
   map_counter = n
   output_maps = []
   output_tier = copy.deepcopy(self)
@@ -144,5 +137,14 @@ def random_contractions(self, n):
     map_counter -= 1
   composite_quotient_map = compose_maps(*output_maps)
   return output_tier, composite_quotient_map
-'''Give method `contract_random_edge` to class `Tier`'''
 Tier.random_contractions = random_contractions
+
+
+def include_loops(self):
+    for vertex in self.vertices:
+      self.sparse_edges[0].append(vertex); self.sparse_edges[1].append(vertex)
+      new_edge = [vertex, vertex]
+      self.edges.append(new_edge)
+      self.graph = dgl.heterograph({('node', 'to', 'node'): self.edges})
+      self.sSet.simplices[1].append(new_edge)
+Tier.include_loops = include_loops
