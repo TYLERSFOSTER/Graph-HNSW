@@ -21,6 +21,21 @@ The reason *binary search*-type algorithms are able to speed up search-type task
 
 [...]
 
+### Using topology to narrow the search space within a graph.
+[...]
+
+<p align="center">
+  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_001.jpg" alt="drawing" width="375"/>
+</p>
+<p align="center">
+
+[...]
+
+<p align="center">
+  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_002.jpg" alt="drawing" width="380"/>
+</p>
+<p align="center">
+
 ### Vertex re-indexing issue for graph quotients.
 <p align="center">
 <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/inactive_vertices.jpg" alt="drawing" width="350"/>
@@ -38,16 +53,4 @@ This implies that iIf we hope to detect, downstairs, regions of the graph over w
 </p>
 
 [...]
-
-<p align="center">
-  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_001.jpg" alt="drawing" width="375"/>
-</p>
-<p align="center">
-
-[...]
-
-<p align="center">
-  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_002.jpg" alt="drawing" width="380"/>
-</p>
-<p align="center">
 
