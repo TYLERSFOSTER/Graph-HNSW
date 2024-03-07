@@ -59,16 +59,13 @@ def one_more_cut(sequence_of_cuts):
 
 def all_partitions(input_list):
   output_partitions = {0 : [[input_list]]}
-  N = len(input_list)
-  while N not in output_partitions:
-    indexing_keys = [key for key in output_partitions]
-    for key in indexing_keys:
-      if key+1 not in output_partitions:
-        output_partitions.update({key+1 : []})
-      indexing_sequences_of_cuts = copy.deepcopy(output_partitions[key])
-      for sequence_of_cuts in indexing_sequences_of_cuts:
-        new_sequences_of_cuts = one_more_cut(sequence_of_cuts)
-        for sequence_of_cuts in new_sequences_of_cuts:
-          if sequence_of_cuts not in output_partitions[key+1]:
-            output_partitions[key+1].append(sequence_of_cuts)
+  key = 0
+  while len(input_list) not in output_partitions:
+    output_partitions.update({key+1 : []})
+    for sequence_of_cuts in output_partitions[key]:
+      output_partitions[key+1] = output_partitions[key+1] + one_more_cut(sequence_of_cuts)
+    key += 1
+  output_partitions.pop(key)
+  for key in output_partitions:
+    print('Partitions of length {}:'.format(key+1), output_partitions[key])
   return output_partitions

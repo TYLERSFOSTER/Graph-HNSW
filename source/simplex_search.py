@@ -171,6 +171,7 @@ class Bot():
           print('Length of `downstairs_simplices`:', len(downstairs_simplices))
           print('`downstairs_simplices`:', downstairs_simplices)
           current_partitions = helpers.all_partitions([v for v in range(d+1)])
+          print('`current_partitions`:', current_partitions)
           print('\nCycle of `for` loop in `while` subblock now complete.')
       print('\nCycle of `while` loop now complete.')
       print('__________________________________')
