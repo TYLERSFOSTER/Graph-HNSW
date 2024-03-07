@@ -36,3 +36,11 @@ This implies that iIf we hope to detect, downstairs, regions of the graph over w
 <p align="center">
 <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/search_order.jpg" alt="drawing" width="500"/>
 </p>
+
+[...]
+
+<p align="center">
+  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_001.jpg" alt="drawing" width="375"/>
+  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_002.jpg" alt="drawing" width="280"/>
+</p>
+<p align="center">
