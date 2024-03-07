@@ -21,7 +21,7 @@ The reason *binary search*-type algorithms are able to speed up search-type task
 
 [...]
 
-### Using topology to narrow the search space within a graph.
+### Using topology to manage the combinatorial explosion implicit in graph searches.
 [...]
 
 <p align="center">
