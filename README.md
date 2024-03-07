@@ -41,14 +41,6 @@ This implies that iIf we hope to detect, downstairs, regions of the graph over w
 
 <p align="center">
   <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_001.jpg" alt="drawing" width="375"/>
-<style>
-.vl {
-  border-left: 6px solid green;
-  height: 500px;
-}
-</style>
-
-<div class="vl"></div>
-  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_002.jpg" alt="drawing" width="280"/>
+  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_002.jpg" alt="drawing" width="375"/>
 </p>
 <p align="center">
