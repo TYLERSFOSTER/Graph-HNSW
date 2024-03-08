@@ -52,9 +52,9 @@ class Bot():
 
 
   def print_parameters(self):
-    print('Search index:', self.search_index)
-    print('Search dimension:', self.search_dimension)
-    print('Simplicial set at this tier:', self.tower.tiers[self.search_index].sSet.simplices)
+    print('         Current search index:', self.search_index)
+    print('         Current search dimension:', self.search_dimension)
+    print('         Current simplicial set at this tier:', self.tower.tiers[self.search_index].sSet.simplices)
 
   
   def bottom_out_parameters(self):
@@ -119,47 +119,50 @@ class Bot():
     self.print_parameters()
     counter = 0
     while min([self.completion_log[k] for k in self.completion_log]) < self.top_dimension:
-      print('\n\n\n__________________________________')
-      print('New cycle of `run`\'s `while` loop.')
+      print('\n\n\n   __________________________________')
+      print('   New cycle of `run`\'s `while` loop.')
       if counter != 0:
-        print('\nRetrieving Bot parameters at start of this cycle...')
-        print('Completion log at start of this cycle:', self.completion_log)
+        print('\n      Retrieving Bot parameters at start of this cycle...')
+        print('      Completion log at start of this cycle:', self.completion_log)
         self.print_parameters()
-      print('\nUpdating Bot parameters at start of this cycle...')
+      print('\n   Updating Bot parameters at start of this cycle...')
       self.update_parameters()
       self.print_parameters()
       if self.search_index == self.bottommost_index:
-        print('\nRunning `raw` search...')
+        print('\n      Running `raw` search...')
         self.raw()
-        print('`raw` search complete.')
-        print('\nRetrieving Bot parameters after `raw` search...')
-        print('Completion log at start of this cycle:', self.completion_log)
+        print('      `raw` search complete.')
+        print('\n      Retrieving Bot parameters after `raw` search...')
+        print('      Completion log at start of this cycle:', self.completion_log)
         self.print_parameters()
       else:
-        print('\nExecuting subblock to run informed search for simplices in tier {}, based on tier {}...'.format(self.search_index, self.search_index+1))
-        print('Completion log at start of this cycle:', self.completion_log)
+        print('\n      Executing subblock to run informed search for simplices in tier {}, based on tier {}...'.format(self.search_index, self.search_index+1))
+        relevant_preimage_lookup = self.preimage_lookups[(self.search_index+1, self.search_index)]
+        print('      Relevant pre-image look-up:', relevant_preimage_lookup)
+        print('      Completion log at start of this cycle:', self.completion_log)
         present_tier_dimension = self.completion_log[self.search_index]
-        print('Max dimension completed in present tier:', present_tier_dimension)
-        #print('Index:', self.search_index + 1)
         max_downstairs_dimension = self.completion_log[self.search_index + 1]
-        print('Max dimension completed in lower tier:', max_downstairs_dimension)
-        # if present_tier_dimension >= max_downstairs_dimension:
-        #   print('BAD BUG!!!')
+        print('      Max dimension completed in present tier:', present_tier_dimension)
+        print('      Max dimension completed in lower tier:', max_downstairs_dimension)
         for d in range(present_tier_dimension + 1, max_downstairs_dimension + 1):
           if self.search_dimension not in self.tower.tiers[self.search_index].sSet.simplices:
             self.tower.tiers[self.search_index].sSet.simplices.update({self.search_dimension : []})
-          print('\nExecuting cycle of `for` loop within subblock, searching for dimension {} in tier {}...'.format(d, self.search_index, self.search_index, self.bottommost_index))
-          print('Retrieving Bot parameters after `raw` search...')
-          print('Completion log at start of this cycle:', self.completion_log)
+          print('\n         Executing cycle of `for` loop within subblock, searching for dimension {} in tier {}...'.format(d, self.search_index, self.search_index, self.bottommost_index))
+          print('         Retrieving Bot parameters after `raw` search...')
+          print('         Completion log at start of this cycle:', self.completion_log)
           self.print_parameters()
           downstairs_simplices = self.tower.tiers[self.search_index + 1].sSet.simplices
-          print('Length of `downstairs_simplices`:', len(downstairs_simplices))
-          print('`downstairs_simplices`:', downstairs_simplices)
-          current_partitions = helpers.all_partitions([v for v in range(d+1)])
-          print('`current_partitions`:', current_partitions)
-          print('\nCycle of `for` loop in `while` subblock now complete.')
-      print('\nCycle of `while` loop now complete.')
-      print('__________________________________')
+          relevant_downstairs_simplices = downstairs_simplices[d]
+          print('         Length of `relevant_downstairs_simplices`:', len(relevant_downstairs_simplices))
+          print('         `relevant_downstairs_simplices`:', relevant_downstairs_simplices)
+          for downstairs_simplex in relevant_downstairs_simplices:
+            print('            Initiating search for non-degenerate {}-simplices in tier {} that happen to lie over the {}-simplex {} in tier {}.'.format(d+1, self.search_index, d+1, downstairs_simplex, self.search_index+1))
+            relevant_fiber_sequence = [relevant_preimage_lookup[downstairs_vertex] for downstairs_vertex in downstairs_simplex]
+            print('            `relevant_fibers`', relevant_fiber_sequence)
+
+          print('\n         Cycle of `for` loop in `while` subblock now complete.')
+      print('\n   Cycle of `while` loop now complete.')
+      print('   __________________________________')
 
       counter += 1
       if counter > 2:

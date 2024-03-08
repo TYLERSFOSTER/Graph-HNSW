@@ -6,6 +6,7 @@ Run ```python3 testing.py``` at Linux command line, from the directory '/source'
 ### Next TODOs:
 
 - Write the `simplex_search.Bot.run` method.
+	- Need to decorate all simplicial sets attached to  the tower with downstairs images. This will aid in running the fiber-centeric search iteratively. 
 - Do some more aggressive testing of `simplex_search.Bot.raw`.
 
 ## Some key ideas
