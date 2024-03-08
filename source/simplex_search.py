@@ -45,6 +45,23 @@ class Bot():
         target_vertex = edge[1]
         self.edge_aids[tier_index][target_vertex].append(source_vertex)
     '''Attributes that change as Bot searches'''
+    self.fast_search_sSets = {}
+    for tier_index in self.tower.tiers:
+      if tier_index == self.bottommost_index:
+        continue
+      self.fast_search_sSets.update({tier_index : {}})
+      current_sSet = self.tower.tiers[tier_index].sSet.simplices
+      current_map = self.tower.maps[(tier_index, tier_index + 1)].partial_map
+      for dimension in current_sSet:
+        self.fast_search_sSets[tier_index].update({dimension : {}})
+        current_simplices = current_sSet[dimension]
+        for simplex in current_simplices:
+          image_simplex = str([current_map[vertex] for vertex in simplex])
+          if image_simplex not in self.fast_search_sSets[tier_index][dimension]:
+            self.fast_search_sSets[tier_index][dimension].update({image_simplex : []})
+          self.fast_search_sSets[tier_index][dimension][image_simplex].append(simplex)
+
+      
     self.completion_log = {tier_index: 1 for tier_index in self.tower.tiers} # Because the simplicial set attached to each tier includes edges, the bot can start search at dimension 2
     self.search_index = self.bottommost_index # The bot holds attribute `Bot.search_index` that keeps track of the index wehre it last stopped its search
     self.search_dimension = 2 # The bot holds attribute `Bot.self.search_dimension` that keeps track of where its search halted
@@ -101,7 +118,6 @@ class Bot():
       for simplex in current_simplices:
         simplex_contained_in_source_vertices = True
         for potential_source_vertex in simplex:
-          new_proposition = (potential_source_vertex in source_vertices)
           simplex_contained_in_source_vertices *= (potential_source_vertex in source_vertices)
         if simplex_contained_in_source_vertices:
           new_simplex = simplex + [potential_top_vertex]

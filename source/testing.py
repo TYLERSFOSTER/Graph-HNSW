@@ -14,7 +14,7 @@ Basic wrapper for testing calls
 '''
 def test_call(test_description, function, test_counter, *args, **kwargs):
   assert isinstance(test_counter, int), '`test_counter` must be an integer.'
-  print('\nTest {} \u2014 '.format(test_counter) + test_description)
+  print('Test {} \u2014 '.format(test_counter) + test_description)
   try:
     function(*args, **kwargs)
     print('Test {} completed succesfully'.format(test_counter))
@@ -162,6 +162,7 @@ call_dict = {
 Testing block
 '''
 if __name__ == '__main__':
+  print('\n\nBeginning testing block...\n')
   test_counter = 0
   for key in call_dict:
     function, argument_list, keyword_argument_dictionary  = call_dict[key]
