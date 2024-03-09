@@ -5,6 +5,7 @@ Run ```python3 testing.py``` at Linux command line, from the directory '/source'
 
 ### Next TODOs:
 
+- Need to check if `raw` search on bottom-most tier of tower accumulates degenerate simplices if we've already added loops to the bottom-most tier.
 - Write the `simplex_search.Bot.run` method.
 	- Need to decorate all simplicial sets attached to  the tower with downstairs images. This will aid in running the fiber-centeric search iteratively. 
 - Do some more aggressive testing of `simplex_search.Bot.raw`.
@@ -36,6 +37,8 @@ The reason *binary search*-type algorithms are able to speed up search-type task
   <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_002.jpg" alt="drawing" width="380"/>
 </p>
 <p align="center">
+
+### Number of steps in tower is O(log #G_1)
 
 ### Vertex re-indexing issue for graph quotients.
 <p align="center">

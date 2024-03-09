@@ -19,8 +19,11 @@ class Bot():
     assert top_search_dimension > 0, 'Argument `top_search_dimension` must be a positive integer.'
     #-----------------------------------------
     '''Attributes that do NOT change as Bot searches'''
-    tower_to_search.include_loops()
     self.tower = tower_to_search
+    self.tier_indices = [tier_index for tier_index in self.tower.tiers]
+    for tier_index in self.tier_indices:
+      self.tower.tiers[tier_index].nondegen_sSet = copy.deepcopy(self.tower.tiers[tier_index].sSet).expunge_degenerates()
+    tower_to_search.include_loops()
     self.top_dimension = top_search_dimension
     self.uppermost_index = self.tower.starting_index
     self.bottommost_index = self.tower.ending_index    

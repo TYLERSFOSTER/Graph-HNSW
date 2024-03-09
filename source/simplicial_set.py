@@ -53,6 +53,16 @@ class SSet():
       if local_dim_n not in self.simplices: self.simplices.update({local_dim_n : []})
       if subsimplex not in self.simplices[local_dim_n]: (self.simplices[local_dim_n]).append(subsimplex)
 
+  
+  def expunge_degenerates(self):
+    indexing_dimensions = [dimension for dimension in self.simplices]
+    for dimension in indexing_dimensions:
+      nondegenerate_simplices = [simplex for simplex in self.simplices[dimension] if len(list(set(simplex))) == len(simplex)]
+      self.simplices[dimension] = nondegenerate_simplices
+
+      
+
+
 
 '''
 Functions using above class(es)
