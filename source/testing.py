@@ -7,6 +7,7 @@ import simplicial_set
 import tier
 import tower
 import simplex_search
+import bot_testing
 
 
 '''
@@ -104,6 +105,15 @@ def raw_search_test(edge_pair, ratio_value, include_loops=False):
   test_bot.search_dimension = 2
   test_bot.raw()
 
+def raw_search_loop_test(edge_pair, ratio_value, include_loops=False):
+  test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
+  test_bot = simplex_search.Bot(test_tower)
+  if include_loops: test_bot.include_loops()
+  test_bot.top_dimension = 2
+  test_bot.search_index = test_bot.bottommost_index
+  test_bot.search_dimension = 2
+  test_bot.raw()
+
 def triple_raw_search_test(edge_pair, ratio_value):
   test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
   test_bot = simplex_search.Bot(test_tower)
@@ -116,7 +126,6 @@ def triple_raw_search_test(edge_pair, ratio_value):
 
 def run_search_test(edge_pair, ratio_value):
   test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
-  print(len(test_tower.tiers))
   test_bot = simplex_search.Bot(test_tower)
   test_bot.top_dimension = 3
   test_bot.run()
@@ -152,6 +161,7 @@ call_dict = {
   'Test of `tower.Tower.length` on length-7 cycle graph at edge contraction rate 0.2' : (tower_length_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2], {}),
   'Test of `simplices_search.Bot` instantiated from `tower.Tower` on length-7 cycle graph at edge contraction rate 0.2' : (simplex_search.Bot, [tower.Tower(dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])}), sample_ratio=.2)], {}),
   'Test of `simplices_search.Bot.raw` when 2-simplices are present' : (raw_search_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {}),
+  'Test of `simplices_search.Bot.raw` when 2-simplices are present and loops have been added to bottom tier' : (raw_search_loop_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {}),
   #'Test of `simplices_search.Bot.raw` when 2-simplices are present AND we\'ve added loops at search tier' : (raw_search_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {'include_loops':True}),
   'Test of repeated application of `simplices_search.Bot.raw` when 2-simplices are present' : (triple_raw_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
   'Test of `simplices_search.Bot.run` repeated application of `simplices_search.Bot.raw`' : (run_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
