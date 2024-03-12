@@ -1,6 +1,8 @@
+ 
 <p align="center">
   <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_00X.jpg" alt="drawing" width="37$
 </p>
+
 # Graph-HNSW Application
 **Tyler Foster**  *and*  **Abdul Malik**
 
