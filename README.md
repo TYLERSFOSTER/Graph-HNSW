@@ -1,6 +1,6 @@
 # Graph-HNSW Application
->Tyler Foster
->Abdul Malik
+> Tyler Foster
+> Abdul Malik
 
 Refactor of Graph HNSW scripts
 

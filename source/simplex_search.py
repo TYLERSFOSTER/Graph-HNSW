@@ -14,7 +14,6 @@ class Bot():
                tower_to_search,
                top_search_dimension=1,
                cycle_limit = None,
-               #in_test_mode = False,
                ):
     assert isinstance(tower_to_search, tower.Tower), 'Argument `tower_to_search` must be an instance of the class `tower.Tower`.'
     assert isinstance(top_search_dimension, int), 'Argument `top_search_dimension` must be a positive integer.'
@@ -130,9 +129,6 @@ class Bot():
 
 
   def run(self):
-    # if self.in_test_mode:
-    #   output = bot_testing.run_for_testing(self)
-    #   return output
     self.bottom_out_parameters()
     self.update_parameters()
     counter = 0
@@ -186,8 +182,5 @@ class Bot():
       simplex_list = [simplex for simplex in uppermost_tier_simplices[dimension]]
       for simplex in simplex_list:
         if len(simplex) != len(list(set(simplex))):
-          #print(uppermost_tier_simplices[dimension])
           uppermost_tier_simplices[dimension].remove(simplex)
-    # for dimension in uppermost_tier_simplices:
-    #   print(dimension, ':', uppermost_tier_simplices[dimension])
     return uppermost_tier_simplices
