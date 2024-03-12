@@ -9,7 +9,7 @@ Because message passing across higher-dimensional simplices hidden within a give
 The combinatorial explosion endemic to search algorithms in graphs renders naive versions of such an algorithm useless.
 In the present repository, we develop an application that takes, as input, a directed graph $$G:\ \ \ \ \ \ G_1\xrightarrow{\ \ \ d_0,d_1\ }G_0,$$
 and proceeds to build a descending tower 
-$$\textrm{Tier}_{0}(G)\xrightarrow{\ \ \textrm{map}^{0}_{1}\ \ }\textrm{Tier}_{1}(G)$$
+$$\mbox{Tier}_{0}(G)\xrightarrow{\ \ \mbox{map}^{0}_{1}\ \ }\mbox{Tier}_{1}(G)$$
  
 The sub-component of this larger model that we collect in the present repo does not, itself, use any machine learning
 
