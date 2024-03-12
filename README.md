@@ -7,7 +7,7 @@ This repo collects a refactoring of a critical sub-component of a larger graph m
 The larger project develops a graph machine learning model that uses message passing across higher-dimensional simplices (directed triangles, directed tetrahedra, etc.) to improve performance at node classification tasks in directed graphs.
 Because message passing across higher-dimensional simplices hidden within a given graph only works if we've already identified higher-dimensional simplices implicit in the graph, the forward pass of our graph ML model requires an effective algorithm that searches for higher-dimensional simplices in directed graphs.
 The combinatorial explosion endemic to search algorithms in graphs renders naive versions of such an algorithm useless.
-In the present repository, we develop an application that takes a directed graph $\begin{array}[cc]G_1\ar[r] & G_0\end{array}$
+In the present repository, we develop an application that takes a directed graph $\begin{array}{cc}G_1\ar[r] & G_0\end{array}$
  
 The sub-component of this larger model that we collect in the present repo does not, itself, use any machine learning
 
