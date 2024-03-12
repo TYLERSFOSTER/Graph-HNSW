@@ -1,3 +1,9 @@
+---
+title: my title
+author: my name
+date: today
+---
+
 # Graph-HNSW Application
 **Tyler Foster** & **Abdul Malik**
 
