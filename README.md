@@ -8,13 +8,12 @@ The larger project develops a graph machine learning model that uses message pas
 Because message passing across higher-dimensional simplices hidden within a given graph only works if we've already identified higher-dimensional simplices implicit in the graph, the forward pass of our graph ML model requires an effective algorithm that searches for higher-dimensional simplices in directed graphs.
 The combinatorial explosion endemic to search algorithms in graphs renders naive versions of such an algorithm useless.
 In the present repository, we develop an application that takes, as input, a directed graph $$G:\ \ \ \ \ \ G_1\xrightarrow{\ \ \ d_0,d_1\ }G_0,$$
-and proceeds to build a descending tower
-
- $\mbox{Tier}_{0}(G)$ $\xrightarrow{\ \ \text{map}_{0,1}\ \ }$
+and proceeds to build a descending tower $${}$$
+where each tier is a graph obtained from the tier above by a sequence of random edge contractions.
+The application then searches this tower using a *hierarchical, navigable, small worlds* (*HNSW*) algorithm to leverage knowledge of simplices at one tier in the tower to speed up its search for simplices of the same dimension one tier above.
  
-The sub-component of this larger model that we collect in the present repo does not, itself, use any machine learning
+The sub-component of this larger model that we collect in the present repo does not, itself, use any machine learning. It provides a tool for use in a graph machine learning model developed in a repository elsewhere.
 
-Refactor of Graph HNSW scripts
 
 Run ```python3 testing.py``` at Linux command line, from the directory '/source', to execute a sequence of tests that run through all the basic functionality of the application.
 
