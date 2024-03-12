@@ -14,8 +14,8 @@ The combinatorial explosion endemic to search algorithms in graphs renders naive
 In the present repository, we develop an application that takes, as input, a directed graph $$G:\ \ \ \ \ \ G_1\xrightarrow{\ \ \ d_0,d_1\ }G_0,$$
 and proceeds to build a descending tower $${}$$
 where each tier is a graph obtained from the tier above by a sequence of random edge contractions.
-<p>
-  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/towerTOWER.jpg" alt="drawing" width="775">
+<p align="center">
+  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/towerTOWER.jpg" alt="drawing" width="750">
 </p>
 The application then searches this tower using a *hierarchical, navigable, small worlds* (*HNSW*) algorithm to leverage knowledge of simplices at one tier in the tower to speed up its search for simplices of the same dimension one tier above.
  
