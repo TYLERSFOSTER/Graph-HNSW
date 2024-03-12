@@ -1,6 +1,6 @@
 
 <p>
-  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_00X.jpg" alt="drawing" width="575">
+  <img src="https://github.com/TYLERSFOSTER/Graph-HNSW/blob/main/documentation/material/HNSW_tower_00X.jpg" alt="drawing" width="775">
 </p>
 
 # Graph-HNSW Application
