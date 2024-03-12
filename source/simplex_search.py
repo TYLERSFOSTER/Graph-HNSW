@@ -1,8 +1,8 @@
 import copy
 
 '''Local project modules'''
-import helpers
 import tower
+import bot_testing
 
 
 '''
@@ -14,6 +14,7 @@ class Bot():
                tower_to_search,
                top_search_dimension=1,
                cycle_limit = None,
+               in_test_mode = True,
                ):
     assert isinstance(tower_to_search, tower.Tower), 'Argument `tower_to_search` must be an instance of the class `tower.Tower`.'
     assert isinstance(top_search_dimension, int), 'Argument `top_search_dimension` must be a positive integer.'
@@ -29,6 +30,7 @@ class Bot():
     self.uppermost_index = self.tower.starting_index
     self.bottommost_index = self.tower.ending_index
     self.cycle_limit = cycle_limit
+    self.in_test_mode = in_test_mode
     '''Remove bottom tier if trivial'''
     bottom_sparse_pair = self.tower.tiers[self.bottommost_index].edges
     if bottom_sparse_pair == []:
@@ -128,6 +130,9 @@ class Bot():
 
 
   def run(self):
+    if self.in_test_mode:
+      output = bot_testing.run_for_testing(self)
+      return output
     self.bottom_out_parameters()
     self.update_parameters()
     counter = 0

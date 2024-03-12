@@ -5,10 +5,8 @@ Run ```python3 testing.py``` at Linux command line, from the directory '/source'
 
 ### Next TODOs:
 
-- Need to check if `raw` search on bottom-most tier of tower accumulates degenerate simplices if we've already added loops to the bottom-most tier.
-- Write the `simplex_search.Bot.run` method.
-	- Need to decorate all simplicial sets attached to  the tower with downstairs images. This will aid in running the fiber-centeric search iteratively. 
-- Do some more aggressive testing of `simplex_search.Bot.raw`.
+- Re-write the `for` loop in `tier.Tier.random_contractions`
+- Test the hell out of the `simplex_search.Bot.run` method.
 
 ## Some key ideas
 ### Basic idea behind the application: A platform for generalizations of binary search to finite directed graphs.
@@ -49,7 +47,6 @@ The reason *binary search*-type algorithms are able to speed up search-type task
 If we are unwilling to keep track of degenerate simplices, then it becomess difficult to carry out a graph-HNSW search that finds all simplices implicit in a given graph.
 This is because maps in the graph-HNSW tower can map simplices in a given tier of the tower down to degenerate simplices in the tier immediately  below.
 This implies that iIf we hope to detect, downstairs, regions of the graph over which simplices might lie upstairs, then we have to be willing to keep track of degenerate simplices as we fill out the simplicial set associated to the downstairs tier.
-
 
 ### The graph-HNSW-based simplex search algorithm
 <p align="center">

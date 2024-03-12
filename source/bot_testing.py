@@ -1,5 +1,3 @@
-import simplex_search
-
 def run_for_testing(self):
   self.bottom_out_parameters()
   self.update_parameters()
@@ -79,10 +77,14 @@ def run_for_testing(self):
     ('\n         Cycle of `for` loop in `while` subblock now complete.')
     print('\n   Cycle of `Bot.run`\'s `while` loop now complete.')
     print('   __________________________________')
+
+    print('\nFinal result of search:')
+    for dimension in self.tower.tiers[self.uppermost_index].sSet.simplices:
+      if dimension >= 0:
+        print('Dimension {} simplices:'.format(dimension), self.tower.tiers[self.uppermost_index].sSet.simplices[dimension])
     
     counter += 1
     if self.cycle_limit:
       if counter > self.cycle_limit:
         print('The cycle count in `Bot.run`\'s `while` loop has exceeded the value of `Bot.cycle_limit`.')
         break
-simplex_search.Bot.run_for_testing = run_for_testing
