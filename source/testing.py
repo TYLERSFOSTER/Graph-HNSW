@@ -130,6 +130,13 @@ def run_search_test(edge_pair, ratio_value):
   test_bot.top_dimension = 3
   test_bot.run()
 
+def run_search_with_nondegen_test(edge_pair, ratio_value):
+  test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
+  test_bot = simplex_search.Bot(test_tower)
+  test_bot.top_dimension = 3
+  test_bot.run()
+  test_bot.expunge_degenerates()
+
   
 '''
 Dictionary of calls for testing
@@ -165,6 +172,7 @@ call_dict = {
   #'Test of `simplices_search.Bot.raw` when 2-simplices are present AND we\'ve added loops at search tier' : (raw_search_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {'include_loops':True}),
   'Test of repeated application of `simplices_search.Bot.raw` when 2-simplices are present' : (triple_raw_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
   'Test of `simplices_search.Bot.run` repeated application of `simplices_search.Bot.raw`' : (run_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
+  'Test of `simplices_search.Bot.run` with expunge_degenerates`' : (run_search_with_nondegen_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
 }
 
 

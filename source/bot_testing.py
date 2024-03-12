@@ -77,11 +77,6 @@ def run_for_testing(self):
     ('\n         Cycle of `for` loop in `while` subblock now complete.')
     print('\n   Cycle of `Bot.run`\'s `while` loop now complete.')
     print('   __________________________________')
-
-    print('\nFinal result of search:')
-    for dimension in self.tower.tiers[self.uppermost_index].sSet.simplices:
-      if dimension >= 0:
-        print('Dimension {} simplices:'.format(dimension), self.tower.tiers[self.uppermost_index].sSet.simplices[dimension])
     
     counter += 1
     if self.cycle_limit:

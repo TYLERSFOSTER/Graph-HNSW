@@ -14,7 +14,7 @@ class Bot():
                tower_to_search,
                top_search_dimension=1,
                cycle_limit = None,
-               in_test_mode = True,
+               #in_test_mode = False,
                ):
     assert isinstance(tower_to_search, tower.Tower), 'Argument `tower_to_search` must be an instance of the class `tower.Tower`.'
     assert isinstance(top_search_dimension, int), 'Argument `top_search_dimension` must be a positive integer.'
@@ -30,7 +30,7 @@ class Bot():
     self.uppermost_index = self.tower.starting_index
     self.bottommost_index = self.tower.ending_index
     self.cycle_limit = cycle_limit
-    self.in_test_mode = in_test_mode
+    #self.in_test_mode = in_test_mode
     '''Remove bottom tier if trivial'''
     bottom_sparse_pair = self.tower.tiers[self.bottommost_index].edges
     if bottom_sparse_pair == []:
@@ -130,9 +130,9 @@ class Bot():
 
 
   def run(self):
-    if self.in_test_mode:
-      output = bot_testing.run_for_testing(self)
-      return output
+    # if self.in_test_mode:
+    #   output = bot_testing.run_for_testing(self)
+    #   return output
     self.bottom_out_parameters()
     self.update_parameters()
     counter = 0
@@ -176,3 +176,18 @@ class Bot():
         if counter > self.cycle_limit:
           print('The cycle count in `Bot.run`\'s `while` loop has exceeded the value of `Bot.cycle_limit`.')
           break
+
+  
+  def expunge_degenerates(self):
+    '''Remove degenerate simplices post `Bot.run`.'''
+    uppermost_tier_simplices = self.tower.tiers[self.uppermost_index].sSet.simplices
+    dimension_list = [dimension for dimension in uppermost_tier_simplices]
+    for dimension in dimension_list:
+      simplex_list = [simplex for simplex in uppermost_tier_simplices[dimension]]
+      for simplex in simplex_list:
+        if len(simplex) != len(list(set(simplex))):
+          #print(uppermost_tier_simplices[dimension])
+          uppermost_tier_simplices[dimension].remove(simplex)
+    # for dimension in uppermost_tier_simplices:
+    #   print(dimension, ':', uppermost_tier_simplices[dimension])
+    return uppermost_tier_simplices
