@@ -8,9 +8,7 @@ The larger project develops a graph machine learning model that uses message pas
 Because message passing across higher-dimensional simplices hidden within a given graph only works if we've already identified higher-dimensional simplices implicit in the graph, the forward pass of our graph ML model requires an effective algorithm that searches for higher-dimensional simplices in directed graphs.
 The combinatorial explosion endemic to search algorithms in graphs renders naive versions of such an algorithm useless.
 In the present repository, we develop an application that takes, as input, a directed graph $$G:\ \ \ \ \ \ G_1\xrightarrow{\ \ \ d_0,d_1\ }G_0,$$
-and proceeds to build a descending tower
-
- $\mbox{Tier}_{0}(G)$ $\xrightarrow{\ \ \text{map}_{0,1}\ \ }$
+and proceeds to build a descending tower $${\mbox{Tier}_{1}(G)}{\xrightarrow{\phi_{1,0}}}$$
  
 The sub-component of this larger model that we collect in the present repo does not, itself, use any machine learning
 
