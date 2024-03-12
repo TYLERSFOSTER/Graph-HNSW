@@ -1,4 +1,5 @@
 # Graph-HNSW Application
+Tyler Foster & Abdul Malik
 Refactor of Graph HNSW scripts
 
 Run ```python3 testing.py``` at Linux command line, from the directory '/source', to execute a sequence of tests that run through all the basic functionality of the application.
