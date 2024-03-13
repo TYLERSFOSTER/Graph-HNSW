@@ -7,7 +7,6 @@ import simplicial_set
 import tier
 import tower
 import simplex_search
-import bot_testing
 
 
 '''
