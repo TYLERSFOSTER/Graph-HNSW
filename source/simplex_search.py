@@ -2,7 +2,6 @@ import copy
 
 '''Local project modules'''
 import tower
-import bot_testing
 
 
 '''
@@ -138,6 +137,8 @@ class Bot():
       else:
         relevant_preimage_lookup = self.preimage_lookups[(self.search_index+1, self.search_index)]
         d = self.search_dimension
+        print(self.search_index)
+        print(self.search_dimension)
         if self.search_dimension not in self.tower.tiers[self.search_index].sSet.simplices:
           self.tower.tiers[self.search_index].sSet.simplices.update({self.search_dimension : []})
         downstairs_simplices = self.tower.tiers[self.search_index + 1].sSet.simplices
@@ -165,6 +166,7 @@ class Bot():
                 if str(downstairs_simplex) not in self.fast_search_sSets[self.search_index][self.search_dimension]:
                   self.fast_search_sSets[self.search_index].update({self.search_dimension : {str(downstairs_simplex):[]}})
                 self.fast_search_sSets[self.search_index][self.search_dimension][str(downstairs_simplex)].append(new_simplex)
+      print(self.completion_log)
       self.completion_log[self.search_index] = self.search_dimension
       self.update_parameters()
       counter += 1

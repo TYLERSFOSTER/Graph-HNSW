@@ -32,19 +32,22 @@ def test_call(test_description, function, test_counter, *args, **kwargs):
 Define more complex calls for some of the more complex testing
 '''
 
-def run_search_with_nondegen_test(edge_pair, ratio_value):
+def run_test_001(edge_pair, ratio_value):
   test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
   test_bot = simplex_search.Bot(test_tower)
   test_bot.top_dimension = 3
+  test_bot.cycle_limit = 10
   test_bot.run()
   test_bot.expunge_degenerates()
+  print(test_bot.expunge_degenerates())
+  print(test_bot.completion_log)
 
   
 '''
 Dictionary of calls for testing
 '''
 call_dict = {
-  'Test of `simplices_search.Bot.run` with expunge_degenerates`' : (run_search_with_nondegen_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
+  'Test 001 of `simplices_search.Bot.run`' : (run_test_001, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {}),
 }
 
 
