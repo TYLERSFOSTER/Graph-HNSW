@@ -77,7 +77,7 @@ def from_graph(seed_graph):
   output = SSet()
   #vertices = seed_graph.nodes().tolist()
   inout = seed_graph.edges()[0].tolist(), seed_graph.edges()[1].tolist()
-  vertices=set(inout[0]+inout[1])
+  vertices=list(set(inout[0]+inout[1]))
   output.add_vertices(vertices)
   for k in range(len(inout[0])): output.catalog_simplex([inout[0][k], inout[1][k]])
   return output
