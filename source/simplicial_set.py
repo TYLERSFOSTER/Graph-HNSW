@@ -73,12 +73,11 @@ class NonDegenSSet():
 Functions using above class(es)
 '''
 def from_graph(seed_graph):
-  # assert isinstance(seed_graph, dgl.DGLGraph)
-  output = NonDegenSSet()
-  verts = seed_graph.nodes().tolist()
-  output.add_vertices(verts)
+  assert isinstance(seed_graph, dgl.DGLGraph)
+  output = SSet()
+  #vertices = seed_graph.nodes().tolist()
   inout = seed_graph.edges()[0].tolist(), seed_graph.edges()[1].tolist()
-  for k in range(len(inout[0])):
-    output.nondegen_simplex([inout[0][k], inout[1][k]])
-
+  vertices=set(inout[0]+inout[1])
+  output.add_vertices(vertices)
+  for k in range(len(inout[0])): output.catalog_simplex([inout[0][k], inout[1][k]])
   return output
