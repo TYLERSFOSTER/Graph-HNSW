@@ -53,6 +53,30 @@ class SSet():
       if local_dim_n not in self.simplices: self.simplices.update({local_dim_n : []})
       if subsimplex not in self.simplices[local_dim_n]: (self.simplices[local_dim_n]).append(subsimplex)
 
+
+  def dynamic_search(self, search_dimension):
+    '''Method that looks for implicit n-simplices based on knowledge of (n-1)-simplices'''
+    assert isinstance(search_dimension, int)
+    assert search_dimension >= 2
+    if search_dimension not in self.simplices:
+      self.simplices.update({search_dimension: []})
+    vertices = [singleton[0] for singleton in self.simplices[0]]
+    edge_aids = {vertex : [] for vertex in vertices}
+    for edge in self.simplices[1]:
+      source = edge[0]
+      target = edge[1]
+      edge_aids[target].append(source)
+    current_simplices = self.simplices[search_dimension-1]
+    for potential_top_vertex in vertices:
+      source_vertices = edge_aids[potential_top_vertex]
+      for simplex in current_simplices:
+        simplex_contained_in_source_vertices = True
+        for potential_source_vertex in simplex:
+          simplex_contained_in_source_vertices *= (potential_source_vertex in source_vertices)
+        if simplex_contained_in_source_vertices:
+          new_simplex = simplex + [potential_top_vertex]
+          self.simplices[search_dimension].append(new_simplex)
+
   
   def expunge_degenerates(self):
     indexing_dimensions = [dimension for dimension in self.simplices]

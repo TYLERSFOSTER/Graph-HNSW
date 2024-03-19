@@ -57,6 +57,26 @@ class Tier_Map():
   def partial_preimage(self):
     output = helpers.reverse_dictionary(self.partial_map)
     return output
+  
+
+class Tier_Fibration():
+  '''Class representing the fibration of simplicial sets implicit in a `Tier_Map`'''
+  def __init__(self,
+               tier_map
+               ):
+    assert isinstance(tier_map, Tier_Map)
+    self.tier_map = tier_map
+    self.simplicial_fibers = {vertex : simplicial_set.SSet() for vertex in self.tier_map.downstairs_vertices} 
+    for image_vertex in self.simplicial_fibers:
+      preimage = [preimage_vertex for preimage_vertex in self.tier_map.upstairs_vertices if self.tier_map.partial_map[preimage_vertex] == image_vertex]
+      self.simplicial_fibers[image_vertex].simplices[0] = [[v] for v in preimage]
+      self.simplicial_fibers[image_vertex].simplices.update({2 : []})
+      for u in preimage:
+        for v in preimage:
+          candidate_edge = [u, v]
+          if candidate_edge in self.tier_map.upstairs.edges:
+            self.simplicial_fibers[image_vertex].simplices[2].append(candidate_edge)
+
 
 
 '''

@@ -92,6 +92,17 @@ def random_contractions_test(edge_pair, n):
   tier_0 = tier.Tier(seed_graph)
   tier_2, tier_map_0 = tier_0.random_contractions(n)
 
+def tier_fibration_test(edge_pair, ratio_value):
+  current_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
+  tier_map = current_tower.maps[(0,1)]
+  tier_fibration = tier.Tier_Fibration(tier_map)
+
+def tier_fibration_details_test(edge_pair, ratio_value):
+  current_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
+  tier_map = current_tower.maps[(0,1)]
+  tier_fibration = tier.Tier_Fibration(tier_map)
+  print(tier_fibration.simplicial_fibers[0].simplices)
+
 def tower_length_test(edge_pair, ratio_value):
   current_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
 
@@ -130,6 +141,7 @@ def run_search_test(edge_pair, ratio_value):
   test_bot.run()
 
 def run_search_with_nondegen_test(edge_pair, ratio_value):
+  print('\n\n\nSPACE\n\n\n')
   test_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
   test_bot = simplex_search.Bot(test_tower)
   test_bot.top_dimension = 3
@@ -164,6 +176,8 @@ call_dict = {
   'Test of `random_contractions_test` on graph ([0,1,2,3], [1,2,3,0]), with 3 successive contractions' : (random_contractions_test, [([0,1,2,3], [1,2,3,0]), 3], {}), # Debugging needs to start with key error here...
   'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})], {}),
   'Test of `tower.Tower` on length-4 cycle graph ([0,1,2, 3], [1,2,3,0]) at edge contraction rate 0.5' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})], {}),
+  'Test of `Tier_Fibration`' : (tier_fibration_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2], {}),
+  'Test of `Tier_Fibration` details' : (tier_fibration_details_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2], {}),
   'Test of `tower.Tower.length` on length-7 cycle graph at edge contraction rate 0.2' : (tower_length_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2], {}),
   'Test of `simplices_search.Bot` instantiated from `tower.Tower` on length-7 cycle graph at edge contraction rate 0.2' : (simplex_search.Bot, [tower.Tower(dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])}), sample_ratio=.2)], {}),
   'Test of `simplices_search.Bot.raw` when 2-simplices are present' : (raw_search_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {}),
@@ -171,7 +185,7 @@ call_dict = {
   #'Test of `simplices_search.Bot.raw` when 2-simplices are present AND we\'ve added loops at search tier' : (raw_search_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {'include_loops':True}),
   'Test of repeated application of `simplices_search.Bot.raw` when 2-simplices are present' : (triple_raw_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
   'Test of `simplices_search.Bot.run` repeated application of `simplices_search.Bot.raw`' : (run_search_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
-  'Test of `simplices_search.Bot.run` with expunge_degenerates`' : (run_search_with_nondegen_test, [([0,0,1,2,2,3,4,0,0], [1,2,2,3,4,4,0,3,4]), .2], {}),
+  'Test of `simplices_search.Bot.run` with expunge_degenerates`' : (run_search_with_nondegen_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {}),
 }
 
 

@@ -127,28 +127,117 @@ class Bot():
     self.completion_log.update({self.search_index: self.search_dimension})
 
 
+  def fiberwise_raw(self):
+    print('FIBERWISE RAW')
+    admissible_indices = [tier_index for tier_index in self.tower.tiers if tier_index != self.bottommost_index]
+    for tier_index in admissible_indices:
+      for key in self.preimage_lookups[(tier_index+1,tier_index)]:
+        current_fiber = self.preimage_lookups[(tier_index+1,tier_index)][key]
+        simplicial_fiber = {-1: [],
+                            0: [[vertex] for vertex in current_fiber],
+                            1: [],
+                            }
+        for edge in self.tower.tiers[tier_index].edges:
+          if (edge[0] in current_fiber) and (edge[1] in current_fiber):
+            simplicial_fiber[1].append(edge)
+        for vertex in current_fiber:
+          simplicial_fiber[1].append([vertex, vertex])
+        search_dimension = 2
+        while search_dimension <= self.top_dimension:
+          simplicial_fiber.update({search_dimension : []}) 
+          for potential_top_vertex in current_fiber:
+            for simplex in simplicial_fiber[search_dimension-1]:
+              all_edges_present = True
+              for potential_source_vertex in simplex:
+                potential_edge = [potential_source_vertex, potential_top_vertex]
+                if potential_edge not in simplicial_fiber[1]:
+                  all_edges_present = False
+                  break
+              if all_edges_present:
+                new_simplex = simplex + [potential_top_vertex]
+                simplicial_fiber[search_dimension].append(new_simplex)
+          if search_dimension not in self.tower.tiers[self.search_index].sSet.simplices:
+            self.tower.tiers[self.search_index].sSet.simplices.update({search_dimension : []})
+          for simplex in simplicial_fiber[search_dimension]:
+            if simplex not in self.tower.tiers[self.search_index].sSet.simplices[search_dimension]:
+              self.tower.tiers[self.search_index].sSet.simplices[search_dimension].append(simplex)
+          search_dimension += 1
+
+
   def run(self):
     self.bottom_out_parameters()
     self.update_parameters()
+    print('\n\n\n\n\n____________________________________________________________________')
+    print('____________________________________________________________________')
+    print('\nRetrieving Bot parameters at start of `run` search...')
+    print('Completion log at start of `run` search:', self.completion_log)
+    self.print_parameters()
+    self.fiberwise_raw()
     counter = 0
-    while min([self.completion_log[k] for k in self.completion_log]) < self.top_dimension:
+    while min([self.completion_log[k] for k in self.completion_log]) <= self.top_dimension:
+      print('\n\n   __________________________________')
+      print('   New cycle of `Bot.run`\'s `while` loop.')
+      print('\n      ________________________')
+      print('      Full simplicial set at this cycle of `Bot.run`\'s `while` loop:\n')
+      for tier in self.tower.tiers:
+        print('      Tier {}:'.format(tier))
+        for dimension in self.tower.tiers[tier].sSet.simplices:
+          print('         dimension {}:'.format(dimension), self.tower.tiers[tier].sSet.simplices[dimension])
+        if tier != self.bottommost_index:
+          current_map = self.tower.maps[(tier, tier+1)].partial_map
+          #print('Map type:', type(current_map))
+          map_pair = ([], [])
+          for k in current_map:
+            map_pair[0].append(k)
+            map_pair[1].append(current_map[k])
+          print('\n              map:', map_pair[0])
+          print('                  ', map_pair[1], '\n')
+      print('      ________________________\n')
+      if counter != 0:
+        print('\n      Retrieving Bot parameters at start of this cycle...')
+        print('      Completion log at start of this cycle:', self.completion_log)
+        self.print_parameters()
+      print('\n   Updating Bot parameters at start of this cycle...')
+      self.update_parameters()
+      self.print_parameters()
       if self.search_index == self.bottommost_index:
+        print('\n      Running `raw` search...')
         self.raw()
+        print('      `raw` search complete.')
+        print('\n      Retrieving Bot parameters after `raw` search...')
+        print('      Completion log at start of this cycle:', self.completion_log)
+        self.print_parameters()
       else:
+        print('\n      Executing subblock to run informed search for simplices in tier {}, based on tier {}...'.format(self.search_index, self.search_index+1))
         relevant_preimage_lookup = self.preimage_lookups[(self.search_index+1, self.search_index)]
+        print('      Relevant pre-image look-up:', relevant_preimage_lookup)
+        print('      Completion log at start of this cycle:', self.completion_log)
+        present_tier_dimension = self.completion_log[self.search_index]
+        max_downstairs_dimension = self.completion_log[self.search_index + 1]
+        print('      Max dimension completed in present tier:', present_tier_dimension)
+        print('      Max dimension completed in lower tier:', max_downstairs_dimension)
         d = self.search_dimension
-        print(self.search_index)
-        print(self.search_dimension)
         if self.search_dimension not in self.tower.tiers[self.search_index].sSet.simplices:
           self.tower.tiers[self.search_index].sSet.simplices.update({self.search_dimension : []})
+        print('\n         Executing cycle of `for` loop within subblock, searching for dimension {} in tier {}...'.format(d, self.search_index, self.search_index, self.bottommost_index))
+        print('         Retrieving Bot parameters after `raw` search...')
+        print('         Completion log at start of this cycle:', self.completion_log)
+        self.print_parameters()
         downstairs_simplices = self.tower.tiers[self.search_index + 1].sSet.simplices
         relevant_downstairs_simplices = downstairs_simplices[d]
+        print('         Length of `relevant_downstairs_simplices`:', len(relevant_downstairs_simplices))
+        print('         `relevant_downstairs_simplices`:', relevant_downstairs_simplices)
         for downstairs_simplex in relevant_downstairs_simplices:
+          print('            Initiating search for non-degenerate {}-simplices in tier {} that happen to lie over the {}-simplex {} in tier {}.'.format(d+1, self.search_index, d+1, downstairs_simplex, self.search_index+1))
           truncated_downstairs = downstairs_simplex[:-1]
           if str(truncated_downstairs) not in self.fast_search_sSets[self.search_index][d-1]:
             continue
           initial_subsimplices = self.fast_search_sSets[self.search_index][d-1][str(truncated_downstairs)]
+          print('terminal vertex:', downstairs_simplex[-1])
           terminal_fiber = relevant_preimage_lookup[downstairs_simplex[-1]]
+          print('            `terminal_fiber`:', terminal_fiber)
+          print('            Truncated downstairs simplex:', truncated_downstairs)
+          print('            `Bot.fast_search_sSets`:', initial_subsimplices)
           for terminal_vertex in terminal_fiber:
             for initial_simplex in initial_subsimplices:
               forms_full_simplex = True
@@ -166,9 +255,13 @@ class Bot():
                 if str(downstairs_simplex) not in self.fast_search_sSets[self.search_index][self.search_dimension]:
                   self.fast_search_sSets[self.search_index].update({self.search_dimension : {str(downstairs_simplex):[]}})
                 self.fast_search_sSets[self.search_index][self.search_dimension][str(downstairs_simplex)].append(new_simplex)
-      print(self.completion_log)
+        print('               `self.fast_search_sSets[self.search_index][self.search_dimension]`:', self.fast_search_sSets[self.search_index][self.search_dimension])
       self.completion_log[self.search_index] = self.search_dimension
       self.update_parameters()
+      ('\n         Cycle of `for` loop in `while` subblock now complete.')
+      print('\n   Cycle of `Bot.run`\'s `while` loop now complete.')
+      print('   __________________________________')
+      
       counter += 1
       if self.cycle_limit:
         if counter > self.cycle_limit:

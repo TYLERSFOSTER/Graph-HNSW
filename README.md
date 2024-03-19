@@ -26,8 +26,9 @@ The sub-component of this larger model that we collect in the present repo does 
 Run ```python3 testing.py``` at Linux command line, from the directory '/source', to execute a sequence of tests that run through all the basic functionality of the application.
 
 ### Next TODOs:
+- Get rid of `simplex_search.Bot.raw` method, and replace all its previous functionality with method `simplicial_set.SSet.dynamic_search`.
 - Re-write the memory-intensive `for` loop in `tier.Tier.random_contractions`
-- Extensive testing of the `simplex_search.Bot.run` method.
+- Extensive testing of the `simplex_search.Bot.run` method (in progress).
 
 ## Some key ideas
 ### Basic idea behind the application: A platform for generalizations of binary search to finite directed graphs.
