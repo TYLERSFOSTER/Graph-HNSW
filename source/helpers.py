@@ -59,3 +59,15 @@ def all_partitions(input_list):
     key += 1
   output_partition_dictionary.pop(key)
   return output_partition_dictionary
+
+
+def n_simplex(n):
+  assert isinstance(n, int)
+  assert n>0
+  output = ([],[])
+  for i in range(n):
+    for j in range(i+1,n+1):
+      output[0].append(i)
+      output[1].append(j)
+  print('Final graph:', output)
+  return output

@@ -70,12 +70,12 @@ class Tier_Fibration():
     for image_vertex in self.simplicial_fibers:
       preimage = [preimage_vertex for preimage_vertex in self.tier_map.upstairs_vertices if self.tier_map.partial_map[preimage_vertex] == image_vertex]
       self.simplicial_fibers[image_vertex].simplices[0] = [[v] for v in preimage]
-      self.simplicial_fibers[image_vertex].simplices.update({2 : []})
+      self.simplicial_fibers[image_vertex].simplices.update({1 : []}) # Debugging: changed  index `2` to `1`
       for u in preimage:
         for v in preimage:
           candidate_edge = [u, v]
           if candidate_edge in self.tier_map.upstairs.edges:
-            self.simplicial_fibers[image_vertex].simplices[2].append(candidate_edge)
+            self.simplicial_fibers[image_vertex].simplices[1].append(candidate_edge) # Debugging: changed  index `2` to `1`
 
 
 

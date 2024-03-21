@@ -58,6 +58,8 @@ class SSet():
     '''Method that looks for implicit n-simplices based on knowledge of (n-1)-simplices'''
     assert isinstance(search_dimension, int)
     assert search_dimension >= 2
+    if 1 not in self.simplices:
+      self.simplices.update({1 : []})
     if search_dimension not in self.simplices:
       self.simplices.update({search_dimension: []})
     vertices = [singleton[0] for singleton in self.simplices[0]]

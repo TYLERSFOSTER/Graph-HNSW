@@ -97,11 +97,16 @@ def tier_fibration_test(edge_pair, ratio_value):
   tier_map = current_tower.maps[(0,1)]
   tier_fibration = tier.Tier_Fibration(tier_map)
 
-def tier_fibration_details_test(edge_pair, ratio_value):
+def dynamic_search_test(edge_pair, ratio_value):
   current_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
+  for tier_index in current_tower.tiers:
+    print('Tier index {}:'.format(tier_index), current_tower.tiers[tier_index].sSet.simplices)
   tier_map = current_tower.maps[(0,1)]
   tier_fibration = tier.Tier_Fibration(tier_map)
-  print(tier_fibration.simplicial_fibers[0].simplices)
+  simplicial_fiber = tier_fibration.simplicial_fibers[0]
+  print(simplicial_fiber.simplices)
+  simplicial_fiber.dynamic_search(2)
+  print(simplicial_fiber.simplices)
 
 def tower_length_test(edge_pair, ratio_value):
   current_tower = tower.Tower(dgl.heterograph({('node', 'to', 'node'): edge_pair}), sample_ratio=ratio_value)
@@ -177,7 +182,8 @@ call_dict = {
   'Test of free instantiation of `quotient_tower.Tower`' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([1,2], [2,3])})], {}),
   'Test of `tower.Tower` on length-4 cycle graph ([0,1,2, 3], [1,2,3,0]) at edge contraction rate 0.5' : (tower.Tower, [dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])})], {}),
   'Test of `Tier_Fibration`' : (tier_fibration_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2], {}),
-  'Test of `Tier_Fibration` details' : (tier_fibration_details_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2], {}),
+  'Test of `helpers.n_simplex`' : (helpers.n_simplex, [5], {}),
+  'Test of `dynamic_search`' : (dynamic_search_test, [helpers.n_simplex(20), .3], {}),
   'Test of `tower.Tower.length` on length-7 cycle graph at edge contraction rate 0.2' : (tower_length_test, [([0,1,2,3,4,5,6], [1,2,3,4,5,6,0]), .2], {}),
   'Test of `simplices_search.Bot` instantiated from `tower.Tower` on length-7 cycle graph at edge contraction rate 0.2' : (simplex_search.Bot, [tower.Tower(dgl.heterograph({('node', 'to', 'node'): ([0,1,2, 3], [1,2,3,0])}), sample_ratio=.2)], {}),
   'Test of `simplices_search.Bot.raw` when 2-simplices are present' : (raw_search_test, [([0,0,0,1,1,2], [1,2,3,2,3,3]), .2], {}),
